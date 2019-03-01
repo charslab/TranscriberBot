@@ -1,0 +1,42 @@
+{
+  "version": "2.5.0",
+  "database": "data/database.db",
+  "media_path": "media",
+  "languages" : {
+    "arabic": "ar-EG",
+    "catalan": "ca-ES",
+    "chinese_hong_kong": "zh-HK",
+    "chinese_traditional": "zh-TW",
+    "chinese": "zh-CN",
+    "danish": "da-DK",
+    "dutch": "nl-NL",
+    "english": "en-US",
+    "english_uk": "en-GB",
+    "english_us": "en-US",
+    "finnish": "fi-FI",
+    "french": "fr-FR",
+    "german": "de-DE",
+    "italian": "it-IT",
+    "japanese": "ja-JP",
+    "korean": "ko-KR",
+    "norwegian": "nb-NO",
+    "polish": "pl-PL",
+    "portuguese_brazil": "pt-BR",
+    "portuguese": "pt-PT",
+    "russian": "ru-RU",
+    "spanish": "es-ES",
+    "swedish": "sv-SE",
+    "turkish": "tr-TR"
+  },
+  "voice_max_threads": 30,
+  "photos_max_threads": 10,
+
+  "antiflood": {
+    "age_threshold": 10,
+    "flood_ratio": 2,
+    "max_flood_ratio": 6,
+    "time_threshold_warning": 4,
+    "time_threshold_flood": 5,
+    "timeout": 10
+  }
+}
