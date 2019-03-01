@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources lang="it-IT">
+	<string name="language_set">Lingua impostata in Italiano</string>
+	<string name="message_welcome">Messaggio benvenuto italiano</string>
+</resources>
