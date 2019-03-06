@@ -2,9 +2,6 @@ import config
 from telegram.ext import BaseFilter
 
 class FilterIsAdmin(BaseFilter):
-  def __init__(self, bot):
-    self.bot = bot
-
   def filter(self, message):
     if message.chat.id >= 0:
       return True
@@ -20,11 +17,15 @@ class FilterIsAdmin(BaseFilter):
 
     return is_admin
 
+chat_admin = FilterIsAdmin()
+
 class FilterIsOwner(BaseFilter):
-  def __init__(self, bot):
-    self.bot = bot
-    self.owners = config.get_config_prop('telegram')['admins']
+  #def __init__(self):
+    #self.owners = config.get_config_prop('telegram')['admins']
   
   def filter(self, message):
-    is_owner = list(filter(lambda admin: owner == message.chat.id, self.owners))
+    owners = config.get_config_prop('telegram')['admins']
+    is_owner = list(filter(lambda admin: owner == message.chat.id, owners))
     return len(is_owner) > 0
+
+bot_admin = FilterIsOwner()

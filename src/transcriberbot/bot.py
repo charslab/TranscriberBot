@@ -150,8 +150,8 @@ class TranscriberBot(metaclass=metaclass.Singleton):
   def register_message_handler(self, filter, fn):
     self.message_handlers[filter] = fn
 
-  def register_command_handler(self, fn, bypass_admin_check=False):
-    self.command_handlers[fn.__name__] = (fn, bypass_admin_check)
+  def register_command_handler(self, fn, filters=None):
+    self.command_handlers[fn.__name__] = (fn, filters)
 
   def register_callback_handler(self, fn):
     self.callback_handlers[fn.__name__] = fn
@@ -203,15 +203,13 @@ class TranscriberBot(metaclass=metaclass.Singleton):
         h[0], 
         lambda b, u, **kwargs: self.__pre__hook(h[1], b, u, **kwargs)))
     )
-    
-    admin_filter = tbfilters.FilterIsAdmin(self.mqbot)
 
     functional.apply_fn(
       self.command_handlers.items(), 
       lambda h: self.__add_handler(ChannelCommandHandler(
         h[0], 
         lambda b, u, **kwargs: self.__pre__hook(h[1][0], b, u, **kwargs),
-        filters=admin_filter if h[1][1] is False else None))
+        filters=h[1][1]))
     )
 
     functional.apply_fn(
@@ -225,9 +223,9 @@ def message(filter):
     TranscriberBot.get().register_message_handler(filter, fn)
   return decor
 
-def command(bypass_admin_check=False):
+def command(filters=None):
   def decor(fn):
-    TranscriberBot.get().register_command_handler(fn, bypass_admin_check)
+    TranscriberBot.get().register_command_handler(fn, filters)
   return decor
 
 def callback_query(fn):
@@ -245,7 +243,7 @@ def language_handler(bot, update, language):
 def install_language_handlers(language):
   handler = lambda b, u: language_handler(b, u, language)
   handler.__name__ = language
-  TranscriberBot.get().register_command_handler(handler)
+  TranscriberBot.get().register_command_handler(handler, filters=tbfilters.chat_admin)
 
 # Init
 def init():
@@ -664,20 +662,20 @@ def welcome_message(bot, update):
     logger.debug("No record found for chat {}, creating one with lang {}".format(chat_id, language))
     TBDB.create_default_chat_entry(chat_id, language)
 
-@command(bypass_admin_check=False)
+@command(filters=tbfilters.chat_admin)
 def start(bot, update):
   welcome_message(bot, update)
 
-@command(bypass_admin_check=False)
+@command(filters=tbfilters.chat_admin)
 def help(bot, update):
   welcome_message(bot, update)
 
-@command(bypass_admin_check=False)
+@command(filters=tbfilters.chat_admin)
 def lang(bot, update):
   chat_id = get_chat_id(update)
   bot.send_message(chat_id=chat_id, text=TBDB.get_chat_lang(chat_id))
 
-@command(bypass_admin_check=False)
+@command(filters=tbfilters.chat_admin)
 def rate(bot, update):
   chat_id = get_chat_id(update)
   bot.send_message(
@@ -686,7 +684,7 @@ def rate(bot, update):
     is_group = chat_id < 0
   )
 
-@command(bypass_admin_check=False)
+@command(tbfilters.chat_admin)
 def disable_voice(bot, update):
   chat_id = get_chat_id(update)
   TBDB.set_chat_voice_enabled(chat_id, 0)
@@ -696,7 +694,7 @@ def disable_voice(bot, update):
     is_group = chat_id < 0
   )
 
-@command(bypass_admin_check=False)
+@command(tbfilters.chat_admin)
 def enable_voice(bot, update):
   chat_id = get_chat_id(update)
   TBDB.set_chat_voice_enabled(chat_id, 1)
@@ -706,11 +704,11 @@ def enable_voice(bot, update):
     is_group = chat_id < 0
   )
 
-@command(bypass_admin_check=False)
+@command(tbfilters.chat_admin)
 def voice_ask(bot, update):
   pass
 
-@command(bypass_admin_check=False)
+@command(tbfilters.chat_admin)
 def disable_photos(bot, update):
   chat_id = get_chat_id(update)
   TBDB.set_chat_photos_enabled(chat_id, 0)
@@ -720,7 +718,7 @@ def disable_photos(bot, update):
     is_group = chat_id < 0
   )
 
-@command(bypass_admin_check=False)
+@command(tbfilters.chat_admin)
 def enable_photos(bot, update):
   chat_id = get_chat_id(update)
   TBDB.set_chat_photos_enabled(chat_id, 1)
@@ -730,7 +728,7 @@ def enable_photos(bot, update):
     is_group = chat_id < 0
   )
 
-@command(bypass_admin_check=False)
+@command(tbfilters.chat_admin)
 def disable_qr(bot, update):
   chat_id = get_chat_id(update)
   TBDB.set_chat_qr_enabled(chat_id, 0)
@@ -740,7 +738,7 @@ def disable_qr(bot, update):
     is_group = chat_id < 0
   )
 
-@command(bypass_admin_check=False)
+@command(tbfilters.chat_admin)
 def enable_qr(bot, update):
   chat_id = get_chat_id(update)
   TBDB.set_chat_qr_enabled(chat_id, 1)
@@ -750,7 +748,7 @@ def enable_qr(bot, update):
     is_group = chat_id < 0
   )
 
-@command(bypass_admin_check=True)
+@command
 def translate(bot, update):
   chat_id = get_chat_id(update)
   message = update.message
@@ -790,11 +788,11 @@ def translate(bot, update):
 
   message.reply_text(translation)
 
-@command(bypass_admin_check=False)
+@command(tbfilters.chat_admin)
 def stats(bot, update):
   pass
 
-@command(bypass_admin_check=False)
+@command(tbfilters.chat_admin)
 def donate(bot, update):
   chat_id = get_chat_id(update)
   bot.send_message(
@@ -804,7 +802,7 @@ def donate(bot, update):
     is_group = chat_id < 0
   )
 
-@command(bypass_admin_check=True)
+@command
 def privacy(bot, update):
   chat_id = get_chat_id(update)
   bot.send_message(
