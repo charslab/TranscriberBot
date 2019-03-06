@@ -21,11 +21,11 @@ chat_admin = FilterIsAdmin()
 
 class FilterIsOwner(BaseFilter):
   #def __init__(self):
-    #self.owners = config.get_config_prop('telegram')['admins']
+    #self.admins = config.get_config_prop('telegram')['admins']
   
   def filter(self, message):
-    owners = config.get_config_prop('telegram')['admins']
-    is_owner = list(filter(lambda admin: owner == message.chat.id, owners))
+    admins = config.get_config_prop('telegram')['admins']
+    is_owner = list(filter(lambda admin: admin == str(message.chat.id), admins))
     return len(is_owner) > 0
 
 bot_admin = FilterIsOwner()
