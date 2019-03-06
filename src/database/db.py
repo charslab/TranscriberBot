@@ -64,7 +64,13 @@ class TBDB():
       cursor = db.execute("SELECT * FROM chats WHERE chat_id='{0}'".format(chat_id))
       return cursor.fetchone()
 
-  
+  @staticmethod
+  def get_chats():
+    with TBDB._get_db() as db:
+      db.assoc()
+      cursor = db.execute("SELECT * FROM chats")
+      return [dict(x) for x in cursor.fetchall()]
+
   @staticmethod
   def get_chat_lang(chat_id):
     chat_record = TBDB.get_chat_entry(chat_id)

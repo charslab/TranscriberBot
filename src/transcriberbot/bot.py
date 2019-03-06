@@ -57,7 +57,12 @@ class TranscriberBot(metaclass=metaclass.Singleton):
       self._is_messages_queued_default = is_queued_def
       self._msg_queue = mqueue or mq.MessageQueue()
 
-      self.active_chats_cache = {}
+      chats = TBDB.get_chats()
+      print(chats)
+      self.active_chats_cache = dict(zip(
+        [c['chat_id'] for c in chats], 
+        [c['active'] for c in chats]
+      ))
 
     def __del__(self):
       try:
