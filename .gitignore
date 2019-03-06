@@ -13,3 +13,4 @@ src/__pycache__/
 .pytest_cache/
 data/database.db
 media/
+.vscode/

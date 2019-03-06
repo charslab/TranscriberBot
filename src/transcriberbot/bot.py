@@ -635,8 +635,7 @@ def photo(bot, update):
 
 @message(Filters.status_update.new_chat_members)
 def new_chat_member(bot, update):
-  chat_id = get_chat_id(update)
-  message = update.message or channel_post
+  message = update.message or update.channel_post
 
   if bot.get_me() in message.new_chat_members:
     welcome_message(bot, update)
@@ -644,7 +643,7 @@ def new_chat_member(bot, update):
 @message(Filters.status_update.left_chat_member)
 def left_chat_member(bot, update):
   chat_id = get_chat_id(update)
-  message = update.message or channel_post
+  message = update.message or update.channel_post
 
   if message.left_chat_member.id == bot.get_me().id:
     logger.info('Marking chat {} as inactive'.format(chat_id))
