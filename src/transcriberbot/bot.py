@@ -633,6 +633,25 @@ def photo(bot, update):
       process_media_photo, bot, update, p, chat
     )
 
+@message(Filters.status_update.new_chat_members)
+def new_chat_member(bot, update):
+  chat_id = get_chat_id(update)
+  message = update.message or channel_post
+
+  if bot.get_me() in message.new_chat_members:
+    welcome_message(bot, update)
+
+@message(Filters.status_update.left_chat_member)
+def left_chat_member(bot, update):
+  chat_id = get_chat_id(update)
+  message = update.message or channel_post
+
+  if message.left_chat_member.id == bot.get_me().id:
+    logger.info('Marking chat {} as inactive'.format(chat_id))
+    bot.active_chats_cache[chat_id] = 0
+    TBDB.set_chat_active(chat_id, bot.active_chats_cache[chat_id])
+
+
 # Command callbacks
 def welcome_message(bot, update):
   chat_id = get_chat_id(update)
