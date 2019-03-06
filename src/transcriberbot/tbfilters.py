@@ -1,3 +1,4 @@
+import config
 from telegram.ext import BaseFilter
 
 class FilterIsAdmin(BaseFilter):
@@ -18,3 +19,12 @@ class FilterIsAdmin(BaseFilter):
     is_admin = len(is_admin) > 0
 
     return is_admin
+
+class FilterIsOwner(BaseFilter):
+  def __init__(self, bot):
+    self.bot = bot
+    self.owners = config.get_config_prop('telegram')['admins']
+  
+  def filter(self, message):
+    is_owner = list(filter(lambda admin: owner == message.chat.id, self.owners))
+    return len(is_owner) > 0
