@@ -400,11 +400,24 @@ def transcribe_audio_file(bot, update, path):
 
 def process_media_voice(bot, update, media, name):
   chat_id = get_chat_id(update)
+  file_size = media.file_size
+
+  if file_size >= 20*(1024**2):
+    message_id = get_message_id(update)
+    message = bot.send_message(
+                chat_id=chat_id, 
+                text=R.get_string_resource("file_too_big", lang) + "\n",
+                reply_to_message_id=message_id,
+                parse_mode="html",
+                is_group=chat_id < 0
+              ).result()
+    return
+
   file_id = media.file_id
   file_path = os.path.join(config.get_config_prop("app")["media_path"], file_id)
-  file = bot.get_file(file_id)
+  file = bot.get_file(file_id)  
   file.download(file_path)
-  
+
   try:
     transcribe_audio_file(bot, update, file_path)
   except Exception as e:
