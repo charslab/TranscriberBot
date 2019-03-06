@@ -811,3 +811,16 @@ def privacy(bot, update):
     parse_mode='html',
     is_group = chat_id < 0
   )
+
+# Admins commands
+@command(tbfilters.bot_admin)
+def users(bot, update):
+  chat_id = get_chat_id(update)
+  tot_chats = TBDB.get_chats_num()
+  active_chats = TBDB.get_active_chats_num()
+  bot.send_message(
+    chat_id=chat_id,
+    text='Total users: {}\nActive users: {}'.format(tot_chats, active_chats),
+    parse_mode='html',
+    is_group=chat_id < 0
+  )

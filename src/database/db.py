@@ -138,4 +138,17 @@ class TBDB():
   def set_chat_ban(chat_id, ban):
     with TBDB._get_db() as db:
       db.execute("UPDATE chats SET ban='{0}' WHERE chat_id='{1}'".format(ban, chat_id))
+  
+
+  @staticmethod
+  def get_chats_num():
+    with TBDB._get_db() as db:
+      c = db.execute("SELECT count(*) FROM chats")
+      return int(c.fetchone()[0])
+  
+  @staticmethod
+  def get_active_chats_num():
+    with TBDB._get_db() as db:
+      c = db.execute("SELECT count(*) FROM chats where active=1")
+      return int(c.fetchone()[0])
 
