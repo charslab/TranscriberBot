@@ -152,13 +152,13 @@ def process_media_voice(bot, update, media, name):
 
   if file_size >= 20*(1024**2):
     message_id = get_message_id(update)
-    message = bot.send_message(
-                chat_id=chat_id, 
-                text=R.get_string_resource("file_too_big", TBDB.get_chat_lang(chat_id)) + "\n",
-                reply_to_message_id=message_id,
-                parse_mode="html",
-                is_group=chat_id < 0
-              ).result()
+    bot.send_message(
+      chat_id=chat_id, 
+      text=R.get_string_resource("file_too_big", TBDB.get_chat_lang(chat_id)) + "\n",
+      reply_to_message_id=message_id,
+      parse_mode="html",
+      is_group=chat_id < 0
+    )
     return
 
   file_id = media.file_id
@@ -170,7 +170,6 @@ def process_media_voice(bot, update, media, name):
     transcribe_audio_file(bot, update, file_path)
   except Exception as e:
     logger.error("Exception handling %s from %d: %s", name, chat_id, traceback.format_exc())
-    
   finally:
     os.remove(file_path)
 
@@ -185,8 +184,7 @@ def voice(bot, update):
   if update.message is not None:
     v = update.message.voice
   elif update.channel_post is not None:
-    v = update.channel_post.voice
-  file_id = v.file_id 
+    v = update.channel_post.voice 
 
   if voice_enabled == 2:
     pass
