@@ -44,11 +44,18 @@ def __transcribe_chunk(chunk, lang):
 
   return text
 
-def __generate_chunks(segment, length=20, split_on_silence=False): 
+def __generate_chunks(segment, length=20, split_on_silence=False, noise_threshold=-16): 
   chunks = list()
   if split_on_silence is False:
     for i in range(0, len(segment), length*1000):
       chunks.append(segment[i:i+length*1000])
+  else:
+    chunks = pydub.silence.split_on_silence(segment, noise_threshold)
+    for i, chunk in enumerate(chunks):
+      if len(chunk) > length*1000:
+        subchunks = __generate_chunks(chunk, length, split_on_silence, noise_threshold+4)
+        chunks = chunks[:i-1] + subchunks + chunks[i+1:]
+
   return chunks
 
 def __preprocess_audio(audio):
