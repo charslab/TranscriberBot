@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources lang="it-IT">
-	<string name="language_set">Lingua impostata in Italiano</string>
-	<string name="message_welcome">Messaggio benvenuto italiano</string>
+<string name="language_set">Lingua impostata in Italiano</string>
+
+<string name="message_welcome">
+Questo bot trascrive messaggi vocali e immagini in testo.
+Aggiungimi ad un gruppo o inoltrami i messaggi vocali ricevuti.
+
+Scegli una lingua (per i messaggi vocali):
+{languages}
+
+Per qualsiasi problema, o per metterti in contatto con gli sviluppatori, usa @transcribersupport_bot. 
+Puoi effettuare una donazione con il comando /donate, ci aiuterà a sostenere i costi del servizio e a migliorarlo.
+
+{b}Nota{/b}: nei gruppi, il bot risponderà solo ai comandi dati {b}dagli admin{/b}
+</string>
+
+<string name="message_donate">
+Puoi fare una donazione per TranscriberBot su PayPal.
+Le donazioni ci sono di grande aiuto, grazie!
+I ricavi verranno utilizzati per pagare il costo dei server e consentire lo sviluppo di nuove features.
+
+<![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9H5XK6UDCAS86]]>
+
+Puoi anche effettuare una donazione in BTC, ETH o LTC
+
+BTC: {code}1DTrCfoNb9RLJnR5dfJvo9zwRjBZj8j1PY{/code}
+
+ETH: {code}0x0b784efc808527c75a8ef12a80622c41c28d45bd{/code}
+
+LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
+</string>
+
+<string name="message_private">
+Mandami un messaggio vocale o un'immagine con del testo
+</string>
+
+<string name="voice_enabled">Voce abilitata</string>
+<string name="voice_disabled">Voce disabilitata</string>
+<string name="photos_enabled">Foto abilitate</string>
+<string name="photos_disabled">Foto disabilitate</string>
+<string name="qr_enabled">QR abilitato</string>
+<string name="qr_disabled">QR disabilitato</string>
+
+<string name="file_too_big">Spiacente, il file è troppo grande! (20MB max)</string>
+
+<string name="transcribing">Trascrivendo..</string>
+<string name="audio_long">L'audio è molto lungo ({0}s), ci vorrà un po'</string>
+<string name="transcription_text">{b}Testo:{/b}</string>
+<string name="transcription_continues">{b}[continua]:{/b}</string>
+<string name="transcription_failed">Non sono riuscito a trascrivere l'audio</string>
+<string name="transcription_stopped">{b}[Fermato]{/b}</string>
+
+<string name="photo_recognizing">Riconoscimento..</string>
+<string name="ocr_result">{b}Testo riconosciuto:{/b}</string>
+<string name="photo_no_text">Nessun testo riconosciuto</string>
+<string name="qr_result">{b}Codice QR rilevato:{/b}</string>
+<string name="qr_no_text">Nessun codice QR rilevato</string>
+
+<string name="flood_warning">{b}ATTENZIONE:{/b} flood rilevato. Stop allo spam, perfavore</string>
+
+<string name="translate_language_not_found">Lingua sconosciuta: {language}</string>
+<string name="translate_reply_to_message">Devi rispondere a un messaggio, per poterlo tradurre</string>
+
+<string name="privacy_policy">
+Non memorizziamo nessun dato personale o contenuto multimediale (come audio o immagini).
+Gli unici dati che conserviamo sono l'id della chat di telegram, insieme alle impostazioni scelte.
+I messaggi vocali/file audio sono inoltrati a wit.ai (https://wit.ai/terms) per la trascrizione,e vengono immediatamente cancellati al termine.
+Le immagini vengono rimosse dai nostri server dopo che l'OCR o il rilevamento di QR sono stati effettuati (offline).
+
+NON memorizziamo nessun CONTENUTO dei messaggi (testo, multimedia o altro).
+</string>
 </resources>

@@ -19,7 +19,7 @@ You can /donate if you like this bot. This will help us maintain the service and
 
 <string name="message_rate">https://telegram.me/storebot?start=transcriber_bot</string>
 <string name="message_donate">
-You can make a donation for transcriber_bot on PayPal. This will really help us, thanks for your support!
+You can make a donation for TranscriberBot on PayPal. This will really help us, thanks for your support!
 Money from donations will be used for paying the server and backend costs and let the devs make new features!
 
 <![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9H5XK6UDCAS86]]>
@@ -59,7 +59,7 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 
 <string name="flood_warning">{b}WARNING:{/b} flood detected. Stop spamming please</string>
 
-<string name="translate_language_not_found">Unknown language: {}</string>
+<string name="translate_language_not_found">Unknown language: {language}</string>
 <string name="translate_reply_to_message">You must reply to a message in order to translate it</string>
 
 <string name="privacy_policy">We do not store any personal data or media content (such as audio or pictures). The only user data we store is the telegram chat id along with the chosen settings. Voice/audio messages are sent to (wit.ai https://wit.ai/terms) for transcription, and are immediately deleted after the transcription is completed. Pictures are immediately deleted from our server after OCR or QR recognition is perfomed (offline). 
