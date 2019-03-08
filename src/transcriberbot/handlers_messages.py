@@ -83,7 +83,7 @@ def transcribe_audio_file(bot, update, path):
             reply_markup=keyboard
           ).result()
 
-        text += speech
+        text += ' ' + speech
         retry = False
         success = True
 
