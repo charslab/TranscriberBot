@@ -45,7 +45,7 @@ Mandami un messaggio vocale o un'immagine con del testo
 
 <string name="file_too_big">Spiacente, il file è troppo grande! (20MB max)</string>
 
-<string name="transcribing">Trascrivendo..</string>
+<string name="transcribing">Trascrizione..</string>
 <string name="audio_long">L'audio è molto lungo ({0}s), ci vorrà un po'</string>
 <string name="transcription_text">{b}Testo:{/b}</string>
 <string name="transcription_continues">{b}[continua]:{/b}</string>
