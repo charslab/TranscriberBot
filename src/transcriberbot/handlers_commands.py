@@ -154,7 +154,7 @@ def donate(bot, update):
     is_group = chat_id < 0
   )
 
-@command
+@command(filters=None)
 def privacy(bot, update):
   chat_id = get_chat_id(update)
   bot.send_message(
