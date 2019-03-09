@@ -32,9 +32,9 @@ def _load_xml_resouce(path):
   if lang not in strings_r:
     strings_r[lang] = {}
 
-  replacements = ('{b}', '<b>'), ('{/b}', '</b>'), 
+  replacements = (('{b}', '<b>'), ('{/b}', '</b>'), 
   ('{i}', '<i>'), ('{/i}', '</i>'), 
-  ('{code}', '<code>'), ('{/code}', '</code>')  
+  ('{code}', '<code>'), ('{/code}', '</code>'))  
   
   for string in e.findall('string'):
     if string.text is None: 
