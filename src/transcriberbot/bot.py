@@ -142,6 +142,10 @@ class TranscriberBot(metaclass=metaclass.Singleton):
       max_workers=config.get_config_prop("app")["photos_max_threads"]
     )
 
+    self.misc_thread_pool = ThreadPoolExecutor(
+      max_workers=2
+    )
+
     self.queue = mq.MessageQueue()
     self.request = Request(con_pool_size=10)
     self.mqbot = self.MQBot(token, request=self.request, mqueue=self.queue)

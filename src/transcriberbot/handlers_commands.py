@@ -10,7 +10,8 @@ from telegram.ext import Filters
 from transcriberbot import tbfilters
 
 import translator
-
+import time
+import traceback
 import logging
 logger = logging.getLogger(__name__)
 
@@ -176,3 +177,36 @@ def users(bot, update):
     parse_mode='html',
     is_group=chat_id < 0
   )
+
+@command(tbfilters.bot_admin)
+def post(bot, update):
+  chat_id = get_chat_id(update)
+  text = update.message.text[6:]
+
+  def __post():
+    chats = TBDB.get_chats()
+    sent = 0
+
+    for chat in chats:
+      try:
+        bot.send_message(
+          chat_id=chat['chat_id'],
+          text=text,
+          parse_mode='html',
+          is_group=int(chat['chat_id']) < 0
+        )
+        sent += 1
+        time.sleep(0.1)
+      except Exception as e:
+        logger.error(
+          "Exception sending broadcast to %d: (%s) %s", 
+          chat['chat_id'], e, traceback.format_exc())
+
+    bot.send_message(
+      chat_id=chat_id,
+      text='Broadcast sent to {}/{} chats'.format(sent, len(chats)),
+      is_group = chat_id < 0
+    )
+    TranscriberBot.get().command_handlers['users'](bot, update)
+  
+  TranscriberBot.get().misc_thread_pool.submit(__post)
