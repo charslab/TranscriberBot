@@ -180,12 +180,9 @@ def voice(bot, update):
   if voice_enabled == 0:
     return
   
-  v = None
-  if update.message is not None:
-    v = update.message.voice
-  elif update.channel_post is not None:
-    v = update.channel_post.voice 
-
+  message = update.message or update.channel_post
+  v = message.voice
+  
   if voice_enabled == 2:
     pass
   else:
@@ -200,13 +197,10 @@ def audio(bot, update):
 
   if voice_enabled == 0:
     return
-
-  a = None
-  if update.message is not None:
-    a = update.message.audio
-  elif update.channel_post is not None:
-    a = update.channel_post.audio
   
+  message = update.message or update.channel_post
+  a = message.audio
+
   if voice_enabled == 2:
     pass
   else:
@@ -245,11 +239,8 @@ def video_note(bot, update):
   if voice_enabled == 0:
     return
 
-  vn = None
-  if update.message is not None:
-    vn = update.message.video_note
-  elif update.channel_post is not None:
-    vn = update.channel_post.video_note
+  message = update.message or update.channel_post
+  vn = message.video_note
   
   if voice_enabled == 2:
     pass
@@ -358,15 +349,11 @@ def photo(bot, update):
   if chat["qr_enabled"] == 0 and chat["photos_enabled"] == 0:
     return
 
-  p = None
-  if update.message is not None:
-    p = update.message.photo
-  elif update.channel_post is not None:
-    p = update.channel_post.photo
+  message = update.message or update.channel_post
 
-  if p:
+  if message.photo:
     TranscriberBot.get().photos_thread_pool.submit(
-      process_media_photo, bot, update, p, chat
+      process_media_photo, bot, update, message.photo, chat
     )
 
 @message(Filters.status_update.new_chat_members)
