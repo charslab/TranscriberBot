@@ -62,7 +62,12 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 <string name="translate_language_not_found">Unknown language: {language}</string>
 <string name="translate_reply_to_message">You must reply to a message in order to translate it</string>
 
-<string name="privacy_policy">We do not store any personal data or media content (such as audio or pictures). The only user data we store is the telegram chat id along with the chosen settings. Voice/audio messages are sent to (wit.ai https://wit.ai/terms) for transcription, and are immediately deleted after the transcription is completed. Pictures are immediately deleted from our server after OCR or QR recognition is perfomed (offline). 
-We do NOT store ANY message content (text, multimedia or anything else).</string>
+<string name="privacy_policy">
+We do not store any personal data or media content (such as audio or pictures). 
+The only user data we store is the telegram chat id along with the chosen settings. 
+Voice/audio messages are sent to (wit.ai https://wit.ai/terms) for transcription, and are immediately deleted after the transcription is completed. 
+Pictures are immediately deleted from our server after OCR or QR recognition is perfomed (offline). 
+We do NOT store ANY message content (text, multimedia or anything else).
+</string>
 
 </resources>
