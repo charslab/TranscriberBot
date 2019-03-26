@@ -57,7 +57,6 @@ class TranscriberBot(metaclass=metaclass.Singleton):
       self._msg_queue = mqueue or mq.MessageQueue()
 
       chats = TBDB.get_chats()
-      print(chats)
       self.active_chats_cache = dict(zip(
         [c['chat_id'] for c in chats], 
         [c['active'] for c in chats]
