@@ -5,3 +5,4 @@ watchdog
 tesserocr
 pydub
 zbarlight
+requests
