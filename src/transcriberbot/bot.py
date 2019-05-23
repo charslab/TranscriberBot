@@ -196,6 +196,10 @@ class TranscriberBot(metaclass=metaclass.Singleton):
     if chat_id in self.floods and self.floods[chat_id] is True:
       return
 
+    if not TBDB.get_chat_entry(chat_id):
+      # happens when welcome/joined message is not received
+      TBDB.create_default_chat_entry(chat_id, 'en-US')
+      
     if chat_id in self.mqbot.active_chats_cache and self.mqbot.active_chats_cache[chat_id] == 0:
       logger.debug("Marking chat {} as active".format(chat_id))
       self.mqbot.active_chats_cache[chat_id] = 1
