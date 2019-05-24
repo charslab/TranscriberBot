@@ -55,7 +55,10 @@ class TBDB():
   @staticmethod
   def create_default_chat_entry(chat_id, lang):
     with TBDB._get_db() as db:
-      db.execute("INSERT INTO chats VALUES(?, ?, ?, ?, ?, ?, ?)", (chat_id, lang, 1, 1, 1, 1, 0))
+      db.execute(
+        "INSERT INTO chats VALUES(chat_id, lang, voice_enabled, photos_enabled, qr_enabled, active, ban)", 
+        (chat_id, lang, 1, 0, 0, 1, 0)
+      )
 
   @staticmethod
   def get_chat_entry(chat_id):
