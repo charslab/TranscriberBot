@@ -101,13 +101,10 @@ def enable_qr(bot, update):
     is_group = chat_id < 0
   )
 
-@command
+@command()
 def translate(bot, update):
   chat_id = get_chat_id(update)
-  message = update.message
-  if not message:
-    message = update.channel_post
-
+  message = update.message or update.channel_post
   if not message:
     return
 
