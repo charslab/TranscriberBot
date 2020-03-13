@@ -44,11 +44,11 @@ def __transcribe_chunk(chunk, lang):
 
   return text
 
-def __generate_chunks(segment, length=20, split_on_silence=False, noise_threshold=-36): 
+def __generate_chunks(segment, length=20000/1001, split_on_silence=False, noise_threshold=-36): 
   chunks = list()
   if split_on_silence is False:
-    for i in range(0, len(segment), length*1000):
-      chunks.append(segment[i:i+length*1000])
+    for i in range(0, len(segment), int(length*1000)):
+      chunks.append(segment[i:i+int(length*1000)])
   else:
     while len(chunks) < 1:
       logger.debug('split_on_silence (threshold %d)', noise_threshold)
@@ -56,7 +56,7 @@ def __generate_chunks(segment, length=20, split_on_silence=False, noise_threshol
       noise_threshold += 4
     
     for i, chunk in enumerate(chunks):
-      if len(chunk) > length*1000:
+      if len(chunk) > int(length*1000):
         subchunks = __generate_chunks(chunk, length, split_on_silence, noise_threshold+4)
         chunks = chunks[:i-1] + subchunks + chunks[i+1:]
 
