@@ -38,6 +38,8 @@ def __transcribe_chunk(chunk, lang):
   
     if '_text' in res:
       text = res['_text']
+    elif 'text' in res:  # Changed in may 2020
+      text = res['text']
 
   except Exception as e:
     logger.error("Could not transcribe chunk: %s", traceback.format_exc())
@@ -78,4 +80,5 @@ def transcribe(path, lang):
     logging.debug(r)
 
     if r is not None:
+      print(f"Trascritto: {r}")
       yield r
