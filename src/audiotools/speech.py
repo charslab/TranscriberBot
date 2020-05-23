@@ -80,5 +80,4 @@ def transcribe(path, lang):
     logging.debug(r)
 
     if r is not None:
-      print(f"Trascritto: {r}")
       yield r
