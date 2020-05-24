@@ -148,7 +148,7 @@ class TranscriberBot(metaclass=metaclass.Singleton):
     self.queue = mq.MessageQueue()
     self.request = Request(con_pool_size=10)
     self.mqbot = self.MQBot(token, request=self.request, mqueue=self.queue)
-    self.updater = Updater(bot=self.mqbot)
+    self.updater = Updater(bot=self.mqbot, use_context=True)
     self.dispatcher = self.updater.dispatcher
     self.__register_handlers()
     self.updater.start_polling(clean=True)
@@ -181,12 +181,14 @@ class TranscriberBot(metaclass=metaclass.Singleton):
   def __add_error_handler(self, handler):
     self.dispatcher.add_error_handler(handler)
 
-  def __pre__hook(self, fn, b, u, **kwargs):
+  def __pre__hook(self, fn, u, c, **kwargs):
+    b = c.bot
+
     m = u.message or u.channel_post
     if not m:
       return
 
-    age = (datetime.now() - m.date).total_seconds() 
+    age = (datetime.utcnow() - m.date.replace(tzinfo=None)).total_seconds()
     if age > config.get_config_prop("app")["antiflood"]["age_threshold"]:
       return
 
