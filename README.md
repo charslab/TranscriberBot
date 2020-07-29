@@ -1,6 +1,6 @@
 # Transcriber Bot
-
-[![Bot](https://img.shields.io/badge/Telegram Bot-@Transcriber_bot-0d86d7.svg?style=flat)][https://t.me/Transcriber_bot]  [![News channel](https://img.shields.io/badge/News channel-@Transcriber_botNewsChannel-0d86d7.svg?style=flat)][https://t.me/Transcriber_botNewsChannel]
+[![Generic badge](https://img.shields.io/badge/Bot-@Transcriber_bot-0d86d7.svg)](https://shields.io)
+[![Generic badge](https://img.shields.io/badge/News-@Transcriber_botNewsChannel-0d86d7.svg)](https://t.me/Transcriber_botNewsChannel)
 
 ## Installation
 
