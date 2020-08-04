@@ -1,4 +1,5 @@
 # Transcriber Bot
+
 [![Generic badge](https://img.shields.io/badge/Bot-@Transcriber_bot-0d86d7.svg)](https://t.me/Transcriber_bot)
 [![Generic badge](https://img.shields.io/badge/News-@Transcriber_botNewsChannel-0d86d7.svg)](https://t.me/Transcriber_botNewsChannel)
 
@@ -32,9 +33,34 @@
    	"translate_key": "YOUR YANDEX TOKEN"
    }`
 
+
+
 ## Installation with virtualenv
 
-**Todo...**
+1. Install virtualenv and setuptools package
+
+   `$ python3 -m pip install --upgrade pip`
+   `$ pip3 install virtualenv setuptools`
+
+2. Make a note of the full file path to the custom version of Python you just installed
+
+   `$ which python3 `
+
+3. Create the virtual environment while you specify the version of Python you wish to use
+
+   `$ virtualenv -p /usr/bin/python3 venv`
+
+4. Activate the new virtual environment
+
+   `$ source venv/bin/activate`
+
+5. Install the requirement packages
+
+   `(venv) $ pip3 install -r requirements.txt`
+
+6. Run the bot
+
+   `(venv) $ python3 src/main.py`
 
 ## Installation with Docker
 
