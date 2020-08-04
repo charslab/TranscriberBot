@@ -3,7 +3,7 @@
 [![Generic badge](https://img.shields.io/badge/Bot-@Transcriber_bot-0d86d7.svg)](https://t.me/Transcriber_bot)
 [![Generic badge](https://img.shields.io/badge/News-@Transcriber_botNewsChannel-0d86d7.svg)](https://t.me/Transcriber_botNewsChannel)
 
-## Installation
+## Quick Start
 
 1. Create your own Telegram bot from @BotFather and take the bot token
 
