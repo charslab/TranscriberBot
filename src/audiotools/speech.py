@@ -6,20 +6,12 @@ import requests
 import pydub
 from pydub import AudioSegment
 
-import config
-
 
 logger = logging.getLogger("speech")
 
-def __transcribe_chunk(chunk, lang):
-  if lang not in config.get_config_prop("wit"):
-    logger.error("Language not found in wit.json %s", lang)
-    return None
-
-  logger.debug("Using key %s %s", lang, config.get_config_prop("wit")[lang])
-
+def __transcribe_chunk(chunk, api_key):
   headers = {
-    'authorization': 'Bearer ' + config.get_config_prop("wit")[lang],
+    'authorization': 'Bearer ' + api_key,
     'accept': 'application/vnd.wit.20180705+json',
     'content-type': 'audio/raw;encoding=signed-integer;bits=16;rate=8000;endian=little',
   }
@@ -30,7 +22,7 @@ def __transcribe_chunk(chunk, lang):
       "POST",
       "https://api.wit.ai/speech",
       headers=headers,
-      params = {'verbose': True},
+      params={'verbose': True},
       data=io.BufferedReader(io.BytesIO(chunk.raw_data))
     )
 
@@ -68,7 +60,8 @@ def __generate_chunks(segment, length=20000/1001, split_on_silence=False, noise_
 def __preprocess_audio(audio):
   return audio.set_sample_width(2).set_channels(1).set_frame_rate(8000)
 
-def transcribe(path, lang):
+
+def transcribe(path, api_key):
   logger.info("Transcribing file %s", path)
   audio = AudioSegment.from_file(path)
 
@@ -77,8 +70,31 @@ def transcribe(path, lang):
 
   for i, chunk in enumerate(chunks):
     logger.debug("Transcribing chunk %d", i)
-    r = __transcribe_chunk(chunk, lang)
-    logger.debug(r)
+    r = __transcribe_chunk(chunk, api_key)
+    logger.debug("Response received: %s", r)
 
     if r is not None:
       yield r
+
+
+if __name__ == "__main__":
+  import argparse
+  import sys
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument("api_key")
+  parser.add_argument("input_filename")
+  parser.add_argument("output_filename")
+  args = parser.parse_args()
+
+  if args.output_filename == "-":
+      output = sys.stdout
+  else:
+      output = open(args.output_filename, mode="w")
+
+  result = transcribe(args.input_filename, args.api_key)
+  for part in result:
+      output.write(part + "\n")
+      output.flush()
+
+  output.close()

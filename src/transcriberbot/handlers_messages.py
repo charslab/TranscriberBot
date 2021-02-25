@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 def private_message(bot, update):
   chat_id = get_chat_id(update)
   bot.send_message(
-    chat_id=chat_id, 
+    chat_id=chat_id,
     text=R.get_string_resource("message_private", TBDB.get_chat_lang(chat_id))
   )
 
@@ -35,14 +35,27 @@ def transcribe_audio_file(bot, update, path):
   message_id = get_message_id(update)
   is_group = chat_id < 0
 
+  api_key = config.get_config_prop("wit").get(lang, None)
+  if api_key is None:
+    logger.error("Language not found in wit.json %s", lang)
+    message = bot.send_message(
+        chat_id=chat_id,
+        text=R.get_string_resource("unknown_api_key", lang).format(language=lang) + "\n",
+        reply_to_message_id=message_id,
+        parse_mode="html",
+        is_group=is_group
+    ).result()
+    return
+  logger.debug("Using key %s for lang %s", api_key, lang)
+
   message = bot.send_message(
-    chat_id=chat_id, 
+    chat_id=chat_id,
     text=R.get_string_resource("transcribing", lang) + "\n",
     reply_to_message_id=message_id,
     parse_mode="html",
     is_group=is_group
   ).result()
-  
+
   TranscriberBot.get().start_thread(message_id)
   logger.debug("Starting thread %d", message_id)
 
@@ -52,7 +65,8 @@ def transcribe_audio_file(bot, update, path):
 
   text = R.get_string_resource("transcription_text", lang) + "\n"
   success = False
-  for speech in audiotools.transcribe(path, lang):
+
+  for speech in audiotools.transcribe(path, api_key):
     logger.debug("Thread %d running: %r", message_id, TranscriberBot.get().thread_running(message_id))
     if TranscriberBot.get().thread_running(message_id) is False:
       TranscriberBot.get().del_thread(message_id)
@@ -75,8 +89,8 @@ def transcribe_audio_file(bot, update, path):
           ).result()
         else:
           message = bot.edit_message_text(
-            text=text + speech + " <b>[..]</b>", 
-            chat_id=chat_id, 
+            text=text + speech + " <b>[..]</b>",
+            chat_id=chat_id,
             message_id=message.message_id,
             parse_mode="html",
             is_group=is_group,
@@ -92,7 +106,7 @@ def transcribe_audio_file(bot, update, path):
         retry_num += 1
         if retry_num >= 3:
           retry = False
-      
+
       except telegram.error.RetryAfter as r:
         logger.warning("Retrying after %d", r.retry_after)
         time.sleep(r.retry_after)
@@ -111,8 +125,8 @@ def transcribe_audio_file(bot, update, path):
     try:
       if success:
         bot.edit_message_text(
-          text=text, 
-          chat_id=chat_id, 
+          text=text,
+          chat_id=chat_id,
           message_id=message.message_id,
           parse_mode="html",
           is_group=is_group
@@ -131,7 +145,7 @@ def transcribe_audio_file(bot, update, path):
       retry_num += 1
       if retry_num >= 3:
         retry = False
-    
+
     except telegram.error.RetryAfter as r:
       logger.warning("Retrying after %d", r.retry_after)
       time.sleep(r.retry_after)
@@ -142,7 +156,7 @@ def transcribe_audio_file(bot, update, path):
 
     except Exception as e:
       logger.error("Exception %s", traceback.format_exc())
-      retry = False 
+      retry = False
 
   TranscriberBot.get().del_thread(message_id)
 
@@ -153,7 +167,7 @@ def process_media_voice(bot, update, media, name):
   if file_size >= 20*(1024**2):
     message_id = get_message_id(update)
     bot.send_message(
-      chat_id=chat_id, 
+      chat_id=chat_id,
       text=R.get_string_resource("file_too_big", TBDB.get_chat_lang(chat_id)) + "\n",
       reply_to_message_id=message_id,
       parse_mode="html",
@@ -163,7 +177,7 @@ def process_media_voice(bot, update, media, name):
 
   file_id = media.file_id
   file_path = os.path.join(config.get_config_prop("app")["media_path"], file_id)
-  file = bot.get_file(file_id)  
+  file = bot.get_file(file_id)
   file.download(file_path)
 
   try:
@@ -179,10 +193,10 @@ def voice(bot, update):
   voice_enabled = TBDB.get_chat_voice_enabled(chat_id)
   if voice_enabled == 0:
     return
-  
+
   message = update.message or update.channel_post
   v = message.voice
-  
+
   if voice_enabled == 2:
     pass
   else:
@@ -197,7 +211,7 @@ def audio(bot, update):
 
   if voice_enabled == 0:
     return
-  
+
   message = update.message or update.channel_post
   a = message.audio
 
@@ -241,7 +255,7 @@ def video_note(bot, update):
 
   message = update.message or update.channel_post
   vn = message.video_note
-  
+
   if voice_enabled == 2:
     pass
   else:
@@ -258,8 +272,8 @@ def process_media_photo(bot, update, photo, chat):
 
   if chat["photos_enabled"] == 1:
     message = bot.send_message(
-      chat_id=chat_id, 
-      text=R.get_string_resource("photo_recognizing", chat["lang"]), 
+      chat_id=chat_id,
+      text=R.get_string_resource("photo_recognizing", chat["lang"]),
       reply_to_message_id=message_id,
       parse_mode="html",
       is_group=is_group
@@ -277,10 +291,10 @@ def process_media_photo(bot, update, photo, chat):
 
         if message is not None:
           bot.edit_message_text(
-            text=qr, 
-            chat_id=chat_id, 
-            message_id=message.message_id, 
-            parse_mode="html", 
+            text=qr,
+            chat_id=chat_id,
+            message_id=message.message_id,
+            parse_mode="html",
             is_group=is_group
           )
           return
@@ -298,19 +312,19 @@ def process_media_photo(bot, update, photo, chat):
       if text is not None:
         text = R.get_string_resource("ocr_result", chat["lang"]) + "\n" + text
         bot.edit_message_text(
-          text=text, 
-          chat_id=chat_id, 
-          message_id=message.message_id, 
-          parse_mode="html", 
+          text=text,
+          chat_id=chat_id,
+          message_id=message.message_id,
+          parse_mode="html",
           is_group=is_group
         )
         return
 
       bot.edit_message_text(
-        text=R.get_string_resource("photo_no_text", chat["lang"]), 
-        chat_id=chat_id, 
-        message_id=message.message_id, 
-        parse_mode="html", 
+        text=R.get_string_resource("photo_no_text", chat["lang"]),
+        chat_id=chat_id,
+        message_id=message.message_id,
+        parse_mode="html",
         is_group=is_group
       )
 
@@ -326,7 +340,7 @@ def process_media_photo(bot, update, photo, chat):
     retry_num += 1
     if retry_num >= 3:
       retry = False
-  
+
   except telegram.error.RetryAfter as r:
     logger.warning("Retrying after %d", r.retry_after)
     time.sleep(r.retry_after)
@@ -337,8 +351,8 @@ def process_media_photo(bot, update, photo, chat):
 
   except Exception as e:
     logger.error("Exception %s", traceback.format_exc())
-    retry = False 
-  
+    retry = False
+
   finally:
     os.remove(file_path)
 

@@ -10,7 +10,7 @@ Aggiungimi ad un gruppo o inoltrami i messaggi vocali ricevuti.
 Scegli una lingua (per i messaggi vocali):
 {languages}
 
-Per qualsiasi problema, o per metterti in contatto con gli sviluppatori, usa @transcribersupport_bot. 
+Per qualsiasi problema, o per metterti in contatto con gli sviluppatori, usa @transcribersupport_bot.
 Puoi effettuare una donazione con il comando /donate, ci aiuterà a sostenere i costi del servizio e a migliorarlo.
 
 {b}Nota{/b}: nei gruppi, il bot risponderà solo ai comandi dati {b}dagli admin{/b}
@@ -71,4 +71,7 @@ Le immagini vengono rimosse dai nostri server dopo che l'OCR o il rilevamento di
 
 NON memorizziamo nessun CONTENUTO dei messaggi (testo, multimedia o altro).
 </string>
+
+<string name="unknown_api_key">{b}ERRORE:{/b} ops, non ho trovato la chiave API Wit per la lingua {language}. :(</string>
+
 </resources>
