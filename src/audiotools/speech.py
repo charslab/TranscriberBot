@@ -69,16 +69,16 @@ def __preprocess_audio(audio):
   return audio.set_sample_width(2).set_channels(1).set_frame_rate(8000)
 
 def transcribe(path, lang):
-  logging.info("Transcribing file %s", path)
+  logger.info("Transcribing file %s", path)
   audio = AudioSegment.from_file(path)
 
   chunks = __generate_chunks(__preprocess_audio(audio))
-  logging.debug("Got %d chunks", len(chunks))
+  logger.debug("Got %d chunks", len(chunks))
 
   for i, chunk in enumerate(chunks):
-    logging.debug("Transcribing chunk %d", i)
+    logger.debug("Transcribing chunk %d", i)
     r = __transcribe_chunk(chunk, lang)
-    logging.debug(r)
+    logger.debug(r)
 
     if r is not None:
       yield r
