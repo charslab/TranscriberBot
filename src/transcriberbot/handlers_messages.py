@@ -77,11 +77,11 @@ def transcribe_audio_file(bot, update, path):
 
     while retry and TranscriberBot.get().thread_running(message_id):
       try:
-        if len(text + speech) >= 4000:
+        if len(text + " " + speech) >= 4000:
           text = R.get_string_resource("transcription_continues", lang) + "\n"
           message = bot.send_message(
             chat_id=chat_id,
-            text=text + speech + " <b>[..]</b>",
+            text=text + " " + speech + " <b>[..]</b>",
             reply_to_message_id=message.message_id,
             parse_mode="html",
             is_group=is_group,
@@ -89,7 +89,7 @@ def transcribe_audio_file(bot, update, path):
           ).result()
         else:
           message = bot.edit_message_text(
-            text=text + speech + " <b>[..]</b>",
+            text=text + " " + speech + " <b>[..]</b>",
             chat_id=chat_id,
             message_id=message.message_id,
             parse_mode="html",
@@ -97,7 +97,7 @@ def transcribe_audio_file(bot, update, path):
             reply_markup=keyboard
           ).result()
 
-        text += ' ' + speech
+        text += " " + speech
         retry = False
         success = True
 
