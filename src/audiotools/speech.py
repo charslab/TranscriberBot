@@ -1,12 +1,13 @@
-import functional
-import requests
-import config
+import io
 import logging
 import traceback
-import pydub
-import io
 
+import requests
+import pydub
 from pydub import AudioSegment
+
+import config
+
 
 logger = logging.getLogger("speech")
 
@@ -15,7 +16,7 @@ def __transcribe_chunk(chunk, lang):
     logger.error("Language not found in wit.json %s", lang)
     return None
 
-  logging.debug("Using key %s %s", lang, config.get_config_prop("wit")[lang])
+  logger.debug("Using key %s %s", lang, config.get_config_prop("wit")[lang])
 
   headers = {
     'authorization': 'Bearer ' + config.get_config_prop("wit")[lang],
@@ -24,18 +25,18 @@ def __transcribe_chunk(chunk, lang):
   }
 
   text = None
-  try: 
+  try:
     request = requests.request(
       "POST",
-      "https://api.wit.ai/speech", 
-      headers=headers, 
+      "https://api.wit.ai/speech",
+      headers=headers,
       params = {'verbose': True},
       data=io.BufferedReader(io.BytesIO(chunk.raw_data))
     )
 
     logger.debug("Request response %s", request.text)
     res = request.json()
-  
+
     if '_text' in res:
       text = res['_text']
     elif 'text' in res:  # Changed in may 2020
@@ -46,7 +47,7 @@ def __transcribe_chunk(chunk, lang):
 
   return text
 
-def __generate_chunks(segment, length=20000/1001, split_on_silence=False, noise_threshold=-36): 
+def __generate_chunks(segment, length=20000/1001, split_on_silence=False, noise_threshold=-36):
   chunks = list()
   if split_on_silence is False:
     for i in range(0, len(segment), int(length*1000)):
@@ -56,7 +57,7 @@ def __generate_chunks(segment, length=20000/1001, split_on_silence=False, noise_
       logger.debug('split_on_silence (threshold %d)', noise_threshold)
       chunks = pydub.silence.split_on_silence(segment, noise_threshold)
       noise_threshold += 4
-    
+
     for i, chunk in enumerate(chunks):
       if len(chunk) > int(length*1000):
         subchunks = __generate_chunks(chunk, length, split_on_silence, noise_threshold+4)
