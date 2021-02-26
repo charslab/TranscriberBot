@@ -11,7 +11,7 @@ __configs = {}
 
 def parse_file(file):
   logger.info("Loading config file %s", file)
-  
+
   with open(file) as f:
     data = json.load(f)
   return data
