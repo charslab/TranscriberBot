@@ -70,4 +70,7 @@ Los mensajes de audio se envían a (wit.ai https://wit.ai/terms) para la transcr
 Las fotos se borran inmediatamente de nuestro servidor una vez se ha escandado en busca de texto o QR (offline).
 NO guardamos el contenido de NINGÚN mensaje (textp, multimedia o cualquier otra cosa)
 </string>
+
+<string name="unknown_api_key">{b}ERROR:{/b} oops, no encontré la llave API Wit para la lengua {language}. :(</string>
+
 </resources>
