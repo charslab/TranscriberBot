@@ -71,4 +71,6 @@ Imagens são imediatamente apagadas do nosso servidor após o reconhecimento de 
 Nós NÃO armazenamos NENHUM conteúdo de mensagens (texto, multimídia ou qualquer outra coisa).
 </string>
 
+<string name="unknown_api_key">{b}ERRO:{/b} ops, não encontrei a chave de API Wit para a língua {language}. :(</string>
+
 </resources>

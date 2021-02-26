@@ -25,9 +25,15 @@
 
    You can repeat the points 3 and 4 for support multiple languages.
 
+   You can test if your token is working by running:
+
+   `
+   $ python src/audiotools/speech.py wit_api_key some_file.mp3 transcription.txt
+   `
+
 5. Create your own Yandex translate token on [Yandex website](https://tech.yandex.com/translate/)
 
-6. Edit the file **config/yandex.json** 
+6. Edit the file **config/yandex.json**
 
    `{
    	"translate_key": "YOUR YANDEX TOKEN"
@@ -70,7 +76,7 @@ You can install easily with Docker.
 
 2. Run the script **dockerRun.sh** to create and start the docker container.
 
-   In the run script, the docker directories **config**, **data** and **values** are binding with the repository directory. 
+   In the run script, the docker directories **config**, **data** and **values** are binding with the repository directory.
    If you want to edit the files in the configuration directories you can do this simply by stopping the container.
    As soon as you finish editing the files, just restart the container  to make them active.
 
