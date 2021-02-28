@@ -78,7 +78,7 @@ You can install easily with Docker.
 
    In the run script, the docker directories **config**, **data** and **values** are binding with the repository directory.
    If you want to edit the files in the configuration directories you can do this simply by stopping the container.
-   As soon as you finish editing the files, just restart the container  to make them active.
+   As soon as you finish editing the files, just restart the container to make them active.
 
 ## TODO
 
