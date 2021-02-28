@@ -1,4 +1,4 @@
-FROM python:3.9-buster
+FROM python:3.9-slim
 
 # Set global configs
 WORKDIR /
@@ -9,10 +9,12 @@ RUN export LC_NUMERIC=C
 # Install system dependencies
 RUN apt-get update
 RUN apt-get install --no-install-recommends -y \
+                    build-essential \
                     ffmpeg \
                     libleptonica-dev \
                     libtesseract-dev \
                     libzbar-dev \
+                    python3-dev \
                     && \
     apt-get clean
 
