@@ -9,35 +9,43 @@ from pydub import AudioSegment
 
 logger = logging.getLogger("speech")
 
-def __transcribe_chunk(chunk, api_key):
-  headers = {
-    'authorization': 'Bearer ' + api_key,
-    'accept': 'application/vnd.wit.20180705+json',
-    'content-type': 'audio/raw;encoding=signed-integer;bits=16;rate=8000;endian=little',
-  }
 
-  text = None
-  try:
-    request = requests.request(
-      "POST",
-      "https://api.wit.ai/speech",
-      headers=headers,
-      params={'verbose': True},
-      data=io.BufferedReader(io.BytesIO(chunk.raw_data))
+class WitTranscriber:
+  speech_url = "https://api.wit.ai/speech"
+
+  def __init__(self, api_key):
+    self.session = requests.Session()
+    self.session.headers.update(
+      {
+        "Authorization": "Bearer " + api_key,
+        "Accept": "application/vnd.wit.20180705+json",
+        "Content-Type": "audio/raw;encoding=signed-integer;bits=16;rate=8000;endian=little",
+      }
     )
 
-    logger.debug("Request response %s", request.text)
-    res = request.json()
+  def transcribe(self, chunk):
+    text = None
+    try:
+      response = self.session.post(
+        self.speech_url,
+        params={"verbose": True},
+        data=io.BufferedReader(io.BytesIO(chunk.raw_data))
+      )
+      logger.debug("Request response %s", response.text)
+      data = response.json()
+      if "_text" in data:
+        text = data["_text"]
+      elif "text" in data:  # Changed in may 2020
+        text = data["text"]
 
-    if '_text' in res:
-      text = res['_text']
-    elif 'text' in res:  # Changed in may 2020
-      text = res['text']
+    except requests.exceptions.RequestException as e:
+      logger.error("Could not transcribe chunk: %s", traceback.format_exc())
 
-  except Exception as e:
-    logger.error("Could not transcribe chunk: %s", traceback.format_exc())
+    return text
 
-  return text
+  def close(self):
+    self.session.close()
+
 
 def __generate_chunks(segment, length=20000/1001, split_on_silence=False, noise_threshold=-36):
   chunks = list()
@@ -68,13 +76,15 @@ def transcribe(path, api_key):
   chunks = __generate_chunks(__preprocess_audio(audio))
   logger.debug("Got %d chunks", len(chunks))
 
+  transcriber = WitTranscriber(api_key)
   for i, chunk in enumerate(chunks):
     logger.debug("Transcribing chunk %d", i)
-    r = __transcribe_chunk(chunk, api_key)
-    logger.debug("Response received: %s", r)
+    text = transcriber.transcribe(chunk)
+    logger.debug("Response received: %s", text)
 
-    if r is not None:
-      yield r
+    if text is not None:
+      yield text
+  transcriber.close()
 
 
 if __name__ == "__main__":
