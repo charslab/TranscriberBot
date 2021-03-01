@@ -1,9 +1,8 @@
 {
   "username": "xxxx",
   "token": "xxxxx",
-
   "admins": [
-  	"xxxx",
     "xxxx",
+    "xxxx"
   ]
 }
