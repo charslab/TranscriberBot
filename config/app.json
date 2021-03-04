@@ -32,11 +32,20 @@
   "photos_max_threads": 10,
 
   "audio_ext": [
-    "wav", 
-    "opus", 
-    "3gpp", 
-    "m4a", 
-    "ogg"
+    "3gpp",
+    "m4a",
+    "ogg",
+    "ogx",
+    "opus",
+    "wav"
+  ],
+
+  "video_ext": [
+    "avi",
+    "mkv",
+    "mp4",
+    "ogv",
+    "webm"
   ],
 
   "antiflood": {

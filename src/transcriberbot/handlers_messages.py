@@ -230,8 +230,11 @@ def document(bot, update):
   m = update.message or update.channel_post
   file_name = m.document.file_name
   _, file_ext = os.path.splitext(file_name)
+  file_extension = file_ext[1:]
+  supported_audio_extensions = config.get_config_prop("app").get("audio_ext", [])
+  supported_video_extensions = config.get_config_prop("app").get("video_ext", [])
 
-  if file_ext[1:] not in config.get_config_prop("app")["audio_ext"]:
+  if file_extension not in supported_audio_extensions + supported_video_extensions:
     logger.info('extension %s not recognized', file_ext)
     return
 
