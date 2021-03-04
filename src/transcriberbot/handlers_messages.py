@@ -238,11 +238,9 @@ def document(bot, update):
     logger.info('extension %s not recognized', file_ext)
     return
 
-  if voice_enabled == 0:
+  elif voice_enabled in (0, 2):
     return
 
-  if voice_enabled == 2:
-    pass
   else:
     TranscriberBot.get().voice_thread_pool.submit(
       process_media_voice, bot, update, m.document, 'audio_document'
