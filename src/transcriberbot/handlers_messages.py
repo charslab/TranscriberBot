@@ -81,7 +81,7 @@ def transcribe_audio_file(bot, update, path):
           text = R.get_string_resource("transcription_continues", lang) + "\n"
           message = bot.send_message(
             chat_id=chat_id,
-            text=text + " " + speech + " <b>[..]</b>",
+            text=text + " " + speech + " <b>[...]</b>",
             reply_to_message_id=message.message_id,
             parse_mode="html",
             is_group=is_group,
@@ -89,7 +89,7 @@ def transcribe_audio_file(bot, update, path):
           ).result()
         else:
           message = bot.edit_message_text(
-            text=text + " " + speech + " <b>[..]</b>",
+            text=text + " " + speech + " <b>[...]</b>",
             chat_id=chat_id,
             message_id=message.message_id,
             parse_mode="html",
