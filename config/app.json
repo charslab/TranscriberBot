@@ -30,6 +30,7 @@
   },
   "voice_max_threads": 30,
   "photos_max_threads": 10,
+  "max_media_voice_file_size": 20971520,
 
   "audio_ext": [
     "3gpp",

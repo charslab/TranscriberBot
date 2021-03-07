@@ -42,7 +42,7 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 <string name="qr_enabled">QR enabled</string>
 <string name="qr_disabled">QR disabled</string>
 
-<string name="file_too_big">Sorry, file is too big! (20MB limit)</string>
+<string name="file_too_big">Sorry, file is too big! (limit: {0}MB)</string>
 
 <string name="transcribing">Transcribing...</string>
 <string name="audio_long">Audio is very long ({0}s), this will take some time</string>

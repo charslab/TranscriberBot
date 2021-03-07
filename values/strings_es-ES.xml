@@ -43,7 +43,7 @@ Mandame un mensaje de voz o una imagen con texto.
 <string name="qr_enabled">QR activado</string>
 <string name="qr_disabled">QR desactivado</string>
 
-<string name="file_too_big">¡Lo siento, el archivo es demasiado grande! (20MB max)</string>
+<string name="file_too_big">¡Lo siento, el archivo es demasiado grande! ({0}MB max)</string>
 
 <string name="transcribing">Transcribiendo...</string>
 <string name="audio_long">El audio es muy largo ({0}s), esto llevará un tiempo...</string>

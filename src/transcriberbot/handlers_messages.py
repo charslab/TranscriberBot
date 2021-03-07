@@ -163,12 +163,14 @@ def transcribe_audio_file(bot, update, path):
 def process_media_voice(bot, update, media, name):
   chat_id = get_chat_id(update)
   file_size = media.file_size
+  max_size = config.get_config_prop("app").get("max_media_voice_file_size", 20 * 1024 * 1024)
 
-  if file_size >= 20*(1024**2):
+  if file_size > max_size:
     message_id = get_message_id(update)
+    error_message = R.get_string_resource("file_too_big", TBDB.get_chat_lang(chat_id)).format(max_size / (1024 * 1024)) + "\n"
     bot.send_message(
       chat_id=chat_id,
-      text=R.get_string_resource("file_too_big", TBDB.get_chat_lang(chat_id)) + "\n",
+      text=error_message,
       reply_to_message_id=message_id,
       parse_mode="html",
       is_group=chat_id < 0
