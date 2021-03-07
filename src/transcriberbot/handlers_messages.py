@@ -225,10 +225,11 @@ def audio(bot, update):
 @message(Filters.document)
 def document(bot, update):
   chat_id = get_chat_id(update)
+  is_group = chat_id < 0
   voice_enabled = TBDB.get_chat_voice_enabled(chat_id)
 
-  m = update.message or update.channel_post
-  file_name = m.document.file_name
+  message = update.message or update.channel_post
+  file_name = message.document.file_name
   _, file_ext = os.path.splitext(file_name)
   file_extension = file_ext[1:]
   supported_audio_extensions = config.get_config_prop("app").get("audio_ext", [])
@@ -238,12 +239,16 @@ def document(bot, update):
     logger.info('extension %s not recognized', file_ext)
     return
 
+  elif file_extension in supported_video_extensions and is_group:
+    # discard videos in groups
+    return
+
   elif voice_enabled in (0, 2):
     return
 
   else:
     TranscriberBot.get().voice_thread_pool.submit(
-      process_media_voice, bot, update, m.document, 'audio_document'
+      process_media_voice, bot, update, message.document, 'audio_document'
     )
 
 @message(Filters.video_note)
