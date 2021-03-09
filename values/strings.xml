@@ -42,16 +42,16 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 <string name="qr_enabled">QR enabled</string>
 <string name="qr_disabled">QR disabled</string>
 
-<string name="file_too_big">Sorry, file is too big! (20MB limit)</string>
+<string name="file_too_big">Sorry, file is too big! (limit: {0}MB)</string>
 
-<string name="transcribing">Transcribing..</string>
+<string name="transcribing">Transcribing...</string>
 <string name="audio_long">Audio is very long ({0}s), this will take some time</string>
 <string name="transcription_text">{b}Text:{/b}</string>
 <string name="transcription_continues">{b}[continues]:{/b}</string>
 <string name="transcription_failed">Could not transcribe audio</string>
 <string name="transcription_stopped">{b}[Stopped]{/b}</string>
 
-<string name="photo_recognizing">Recognizing..</string>
+<string name="photo_recognizing">Recognizing...</string>
 <string name="ocr_result">{b}Recognized Text:{/b}</string>
 <string name="photo_no_text">No text recognized</string>
 <string name="qr_result">{b}QR Code found:{/b}</string>

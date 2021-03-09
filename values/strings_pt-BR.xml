@@ -42,16 +42,16 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 <string name="qr_enabled">QR ativado</string>
 <string name="qr_disabled">QR desativado</string>
 
-<string name="file_too_big">Desculpe, arquivo muito grande! (limite de 20MB)</string>
+<string name="file_too_big">Desculpe, arquivo muito grande! (limite de {0}MB)</string>
 
-<string name="transcribing">Transcrevendo..</string>
+<string name="transcribing">Transcrevendo...</string>
 <string name="audio_long">Áudio muito longo ({0}s), isso demorará um pouco</string>
 <string name="transcription_text">{b}Texto:{/b}</string>
 <string name="transcription_continues">{b}[continua]:{/b}</string>
 <string name="transcription_failed">Não pude transcrever o áudio</string>
 <string name="transcription_stopped">{b}[Parado]{/b}</string>
 
-<string name="photo_recognizing">Reconhecendo..</string>
+<string name="photo_recognizing">Reconhecendo...</string>
 <string name="ocr_result">{b}Texto reconhecido:{/b}</string>
 <string name="photo_no_text">Texto não reconhecido</string>
 <string name="qr_result">{b}Código QR encontrado:{/b}</string>
