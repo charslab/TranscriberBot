@@ -19,7 +19,7 @@ Puoi effettuare una donazione con il comando /donate, ci aiuterà a sostenere i 
 <string name="message_donate">
 Puoi fare una donazione per TranscriberBot su PayPal.
 Le donazioni ci sono di grande aiuto, grazie!
-I ricavi verranno utilizzati per pagare il costo dei server e consentire lo sviluppo di nuove features.
+I ricavi verranno utilizzati per pagare il costo dei server e consentire lo sviluppo di nuove funzioni.
 
 <![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9H5XK6UDCAS86]]>
 
@@ -33,7 +33,7 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 </string>
 
 <string name="message_private">
-Mandami un messaggio vocale o un'immagine con del testo
+Mandami un messaggio vocale o un'immagine contenente del testo
 </string>
 
 <string name="voice_enabled">Voce abilitata</string>
@@ -45,14 +45,14 @@ Mandami un messaggio vocale o un'immagine con del testo
 
 <string name="file_too_big">Spiacente, il file è troppo grande! (20MB max)</string>
 
-<string name="transcribing">Trascrizione..</string>
+<string name="transcribing">Trascrizione...</string>
 <string name="audio_long">L'audio è molto lungo ({0}s), ci vorrà un po'</string>
 <string name="transcription_text">{b}Testo:{/b}</string>
 <string name="transcription_continues">{b}[continua]:{/b}</string>
 <string name="transcription_failed">Non sono riuscito a trascrivere l'audio</string>
 <string name="transcription_stopped">{b}[Fermato]{/b}</string>
 
-<string name="photo_recognizing">Riconoscimento..</string>
+<string name="photo_recognizing">Riconoscimento...</string>
 <string name="ocr_result">{b}Testo riconosciuto:{/b}</string>
 <string name="photo_no_text">Nessun testo riconosciuto</string>
 <string name="qr_result">{b}Codice QR rilevato:{/b}</string>
@@ -66,7 +66,7 @@ Mandami un messaggio vocale o un'immagine con del testo
 <string name="privacy_policy">
 Non memorizziamo nessun dato personale o contenuto multimediale (come audio o immagini).
 Gli unici dati che conserviamo sono l'id della chat di telegram, insieme alle impostazioni scelte.
-I messaggi vocali/file audio sono inoltrati a wit.ai (https://wit.ai/terms) per la trascrizione,e vengono immediatamente cancellati al termine.
+I messaggi vocali/file audio sono inoltrati a wit.ai (https://wit.ai/terms) per la trascrizione, e vengono immediatamente cancellati al termine.
 Le immagini vengono rimosse dai nostri server dopo che l'OCR o il rilevamento di QR sono stati effettuati (offline).
 
 NON memorizziamo nessun CONTENUTO dei messaggi (testo, multimedia o altro).
