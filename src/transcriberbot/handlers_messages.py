@@ -63,7 +63,9 @@ def transcribe_audio_file(bot, update, path):
     [[InlineKeyboardButton("Stop", callback_data=message_id)]]
   )
 
-  text = R.get_string_resource("transcription_text", lang) + "\n"
+  text = ""
+  if is_group:
+    text = R.get_string_resource("transcription_text", lang) + "\n"
   success = False
 
   for speech in audiotools.transcribe(path, api_key):
@@ -81,7 +83,7 @@ def transcribe_audio_file(bot, update, path):
           text = R.get_string_resource("transcription_continues", lang) + "\n"
           message = bot.send_message(
             chat_id=chat_id,
-            text=text + " " + speech + " <b>[..]</b>",
+            text=text + " " + speech + " <b>[...]</b>",
             reply_to_message_id=message.message_id,
             parse_mode="html",
             is_group=is_group,
@@ -89,7 +91,7 @@ def transcribe_audio_file(bot, update, path):
           ).result()
         else:
           message = bot.edit_message_text(
-            text=text + " " + speech + " <b>[..]</b>",
+            text=text + " " + speech + " <b>[...]</b>",
             chat_id=chat_id,
             message_id=message.message_id,
             parse_mode="html",
@@ -287,7 +289,8 @@ def process_media_photo(bot, update, photo, chat):
     if chat["qr_enabled"] == 1:
       qr = phototools.read_qr(file_path, chat["lang"])
       if qr is not None:
-        qr = R.get_string_resource("qr_result", chat["lang"]) + "\n" + qr
+        if is_group:
+          qr = R.get_string_resource("qr_result", chat["lang"]) + "\n" + qr
 
         if message is not None:
           bot.edit_message_text(
@@ -310,7 +313,8 @@ def process_media_photo(bot, update, photo, chat):
     if chat["photos_enabled"] == 1:
       text = phototools.image_ocr(file_path, chat["lang"])
       if text is not None:
-        text = R.get_string_resource("ocr_result", chat["lang"]) + "\n" + text
+        if is_group:
+          text = R.get_string_resource("ocr_result", chat["lang"]) + "\n" + text
         bot.edit_message_text(
           text=text,
           chat_id=chat_id,
