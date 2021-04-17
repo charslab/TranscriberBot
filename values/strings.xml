@@ -4,17 +4,17 @@
 <string name="language_set">Language set to {lang}</string>
 
 <string name="message_welcome">
-This bot transcribes audio and pictures into text.
-Add me to a group or forward audio messages and pictures to me!
+This bot transcribes audio and pictures into text. Add it to a group or forward audio messages and pictures to it.
+{b}Note{/b}: Within groups, the bot will respond to {b}admin commands only{/b}
 
-Choose language (for voice messages):
+Choose a language (for voice messages):
 {languages}
 
-/rate this bot or leave your feedback here (https://telegram.me/storebot?start=transcriber_bot)
+/rate this bot or leave your feedback on {a href="https://telegram.me/storebot?start=transcriber_bot"}Store Bot{/a}
 
 If you have any trouble, or want to get in touch with the developers, contact @transcribersupport_bot
-You can /donate if you like this bot. This will help us maintain the service and keep on improving it
-{b}Note{/b}: in groups, the bot will respond to {b}admin commands only{/b}
+
+If you like this bot, you can /donate. This will help us maintain the service and keep on improving it. Thank you!
 </string>
 
 <string name="message_rate">https://telegram.me/storebot?start=transcriber_bot</string>
@@ -24,7 +24,7 @@ Money from donations will be used for paying the server and backend costs and le
 
 <![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9H5XK6UDCAS86]]>
 
-You can also donate with BTC, ETH or LTC
+You can also donate with Bitcoin, Ethereum oder Litecoin
 
 BTC: {code}1DTrCfoNb9RLJnR5dfJvo9zwRjBZj8j1PY{/code}
 
@@ -33,7 +33,7 @@ ETH: {code}0x0b784efc808527c75a8ef12a80622c41c28d45bd{/code}
 LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 </string>
 
-<string name="message_private">Send me a voice message or a picture with some text</string>
+<string name="message_private">Send a voice message or a picture with some text</string>
 
 <string name="voice_enabled">Voice enabled</string>
 <string name="voice_disabled">Voice disabled</string>
@@ -42,7 +42,7 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 <string name="qr_enabled">QR enabled</string>
 <string name="qr_disabled">QR disabled</string>
 
-<string name="file_too_big">Sorry, file is too big! (20MB limit)</string>
+<string name="file_too_big">Sorry, file is too big! (limit: 20 MB)</string>
 
 <string name="transcribing">Transcribing...</string>
 <string name="audio_long">Audio is very long ({0}s), this will take some time</string>
@@ -57,7 +57,7 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 <string name="qr_result">{b}QR Code found:{/b}</string>
 <string name="qr_no_text">No QR code found</string>
 
-<string name="flood_warning">{b}WARNING:{/b} flood detected. Stop spamming please</string>
+<string name="flood_warning">{b}WARNING:{/b} Flood detected. Stop spamming please</string>
 
 <string name="translate_language_not_found">Unknown language: {language}</string>
 <string name="translate_reply_to_message">You must reply to a message in order to translate it</string>
@@ -65,11 +65,11 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 <string name="privacy_policy">
 We do not store any personal data or media content (such as audio or pictures).
 The only user data we store is the telegram chat id along with the chosen settings.
-Voice/audio messages are sent to (wit.ai https://wit.ai/terms) for transcription, and are immediately deleted after the transcription is completed.
+Voice/audio messages are sent to {a href="https://wit.ai/terms"}wit.ai{/a} for transcription, and are immediately deleted after the transcription is completed.
 Pictures are immediately deleted from our server after OCR or QR recognition is perfomed (offline).
 We do NOT store ANY message content (text, multimedia or anything else).
 </string>
 
-<string name="unknown_api_key">{b}ERROR:{/b} oops, cannot find Wit API key for language {language}. :(</string>
+<string name="unknown_api_key">{b}ERROR:{/b} Oops, no wit.ai API key could be found for the language {language}. :(</string>
 
 </resources>
