@@ -5,7 +5,7 @@
 
 <string name="message_welcome">
 This bot transcribes audio and pictures into text. Add it to a group or forward audio messages and pictures to it.
-{b}Note{/b}: Within groups, the bot will respond to {b}admin commands only{/b}
+{b}Note{/b}: Within groups, the bot will respond to commands by {b}non-anonymous admins only{/b}
 
 Choose a language (for voice messages):
 {languages}
