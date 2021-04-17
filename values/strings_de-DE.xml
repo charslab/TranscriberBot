@@ -5,7 +5,7 @@
 
 <string name="message_welcome">
 Dieser Bot transkribiert Audio und Bilder in Text. Du kannst ihn einer Gruppe hinzufügen, oder Bilder und Sprachnachrichten an ihn weiterleiten.
-{b}Wichtig{/b}: Innerhalb von Gruppen antwortet dieser Bot {b}nur Admin-Kommandos{/b}
+{b}Wichtig{/b}: Innerhalb von Gruppen antwortet dieser Bot nur auf Kommandos von {b}nicht-anonymen Admins{/b}
 
 Wähle eine Sprache (für Sprachnachrichten):
 {languages}
