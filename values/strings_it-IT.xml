@@ -43,7 +43,7 @@ Mandami un messaggio vocale o un'immagine contenente del testo
 <string name="qr_enabled">QR abilitato</string>
 <string name="qr_disabled">QR disabilitato</string>
 
-<string name="file_too_big">Spiacente, il file è troppo grande! (20MB max)</string>
+<string name="file_too_big">Spiacente, il file è troppo grande! ({0}MB max)</string>
 
 <string name="transcribing">Trascrizione...</string>
 <string name="audio_long">L'audio è molto lungo ({0}s), ci vorrà un po'</string>

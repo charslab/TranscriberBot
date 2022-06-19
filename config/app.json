@@ -30,13 +30,23 @@
   },
   "voice_max_threads": 30,
   "photos_max_threads": 10,
+  "max_media_voice_file_size": 20971520,
 
   "audio_ext": [
-    "wav", 
-    "opus", 
-    "3gpp", 
-    "m4a", 
-    "ogg"
+    "3gpp",
+    "m4a",
+    "ogg",
+    "ogx",
+    "opus",
+    "wav"
+  ],
+
+  "video_ext": [
+    "avi",
+    "mkv",
+    "mp4",
+    "ogv",
+    "webm"
   ],
 
   "antiflood": {

@@ -12,6 +12,7 @@ from transcriberbot import tbfilters
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 import audiotools
+import html
 import phototools
 import logging
 import traceback
@@ -165,12 +166,14 @@ def transcribe_audio_file(bot, update, path):
 def process_media_voice(bot, update, media, name):
   chat_id = get_chat_id(update)
   file_size = media.file_size
+  max_size = config.get_config_prop("app").get("max_media_voice_file_size", 20 * 1024 * 1024)
 
-  if file_size >= 20*(1024**2):
+  if file_size > max_size:
     message_id = get_message_id(update)
+    error_message = R.get_string_resource("file_too_big", TBDB.get_chat_lang(chat_id)).format(max_size / (1024 * 1024)) + "\n"
     bot.send_message(
       chat_id=chat_id,
-      text=R.get_string_resource("file_too_big", TBDB.get_chat_lang(chat_id)) + "\n",
+      text=error_message,
       reply_to_message_id=message_id,
       parse_mode="html",
       is_group=chat_id < 0
@@ -227,24 +230,30 @@ def audio(bot, update):
 @message(Filters.document)
 def document(bot, update):
   chat_id = get_chat_id(update)
+  is_group = chat_id < 0
   voice_enabled = TBDB.get_chat_voice_enabled(chat_id)
 
-  m = update.message or update.channel_post
-  file_name = m.document.file_name
+  message = update.message or update.channel_post
+  file_name = message.document.file_name
   _, file_ext = os.path.splitext(file_name)
+  file_extension = file_ext[1:]
+  supported_audio_extensions = config.get_config_prop("app").get("audio_ext", [])
+  supported_video_extensions = config.get_config_prop("app").get("video_ext", [])
 
-  if file_ext[1:] not in config.get_config_prop("app")["audio_ext"]:
+  if file_extension not in supported_audio_extensions + supported_video_extensions:
     logger.info('extension %s not recognized', file_ext)
     return
 
-  if voice_enabled == 0:
+  elif file_extension in supported_video_extensions and is_group:
+    # discard videos in groups
     return
 
-  if voice_enabled == 2:
-    pass
+  elif voice_enabled in (0, 2):
+    return
+
   else:
     TranscriberBot.get().voice_thread_pool.submit(
-      process_media_voice, bot, update, m.document, 'audio_document'
+      process_media_voice, bot, update, message.document, 'audio_document'
     )
 
 @message(Filters.video_note)
@@ -314,7 +323,7 @@ def process_media_photo(bot, update, photo, chat):
       text = phototools.image_ocr(file_path, chat["lang"])
       if text is not None:
         if is_group:
-          text = R.get_string_resource("ocr_result", chat["lang"]) + "\n" + text
+          text = R.get_string_resource("ocr_result", chat["lang"]) + "\n" + html.escape(text)
         bot.edit_message_text(
           text=text,
           chat_id=chat_id,

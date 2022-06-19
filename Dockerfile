@@ -15,6 +15,7 @@ RUN apt-get install --no-install-recommends -y \
                     libtesseract-dev \
                     libzbar-dev \
                     python3-dev \
+                    tesseract-ocr \
                     && \
     apt-get clean
 
@@ -25,4 +26,11 @@ RUN pip install --no-cache-dir -U pip && \
 
 # Copy code and define default command
 COPY src/ src/
+
+RUN useradd -m transcriber
+RUN chown -R transcriber src/
+RUN chown -R transcriber media/
+
+USER transcriber
+
 CMD [ "python", "src/main.py" ]
