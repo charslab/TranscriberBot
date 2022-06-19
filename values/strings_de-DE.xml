@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources lang="default">
+<string name="language_set">{lang} als Sprache festgelegt</string>
+
+<string name="message_welcome">
+Dieser Bot transkribiert Audio und Bilder in Text. Du kannst ihn einer Gruppe hinzufügen, oder Bilder und Sprachnachrichten an ihn weiterleiten.
+{b}Wichtig{/b}: Innerhalb von Gruppen antwortet dieser Bot nur auf Kommandos von {b}nicht-anonymen Admins{/b}
+
+Wähle eine Sprache (für Sprachnachrichten):
+{languages}
+
+Im {a href="https://telegram.me/storebot?start=transcriber_bot"}Store-Bot{/a} kannst du diesen Bot bewerten (/rate) oder Feedback hinterlassen!
+
+Wenn du Probleme hast oder mit den Entwicklern in Kontakt treten möchtest, nutze den Support-Bot @transcribersupport_bot!
+
+Wenn dir der Bot gefällt, kannst du den Entwicklern etwas spenden (/donate). Damit hilft du, den Dienst zu aufrecht zu erhalten und weiter zu verbessern. Vielen Dank!
+</string>
+
+<string name="message_rate">https://telegram.me/storebot?start=transcriber_bot</string>
+<string name="message_donate">
+Du kannst für TranscriberBot etwas über PayPal spenden. Das hilft uns wirklich sehr, vielen Dank für deine Unterstützung!
+Einnahmen aus Spenden nutzen wir für Server- und Backend-Kosten, außerdem können die Entwickler neue Funktionen einbauen!
+
+<![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9H5XK6UDCAS86]]>
+
+Du kannst auf in Bitcoin, Ethereum oder Litecoin spenden
+
+BTC: {code}1DTrCfoNb9RLJnR5dfJvo9zwRjBZj8j1PY{/code}
+
+ETH: {code}0x0b784efc808527c75a8ef12a80622c41c28d45bd{/code}
+
+LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
+</string>
+
+<string name="message_private">Schicke eine Sprachnachricht oder ein Bild mit Text</string>
+
+<string name="voice_enabled">Sprache aktiviert</string>
+<string name="voice_disabled">Sprache deaktiviert</string>
+<string name="photos_enabled">Bilder aktiviert</string>
+<string name="photos_disabled">Bilder deaktiviert</string>
+<string name="qr_enabled">QR aktiviert</string>
+<string name="qr_disabled">QR deaktiviert</string>
+
+<string name="file_too_big">Entschuldigung, diese Datei ist zu groß! (Limit: 20 MB)</string>
+
+<string name="transcribing">Wird transkribiert...</string>
+<string name="audio_long">Sprachnachricht ist sehr lang ({0} s), es dauert ein bisschen</string>
+<string name="transcription_text">{b}Text:{/b}</string>
+<string name="transcription_continues">{b}[Fortsetzung]:{/b}</string>
+<string name="transcription_failed">Sprachnachricht konnte nicht transkribiert werden</string>
+<string name="transcription_stopped">{b}[Ende]{/b}</string>
+
+<string name="photo_recognizing">Wird erkannt...</string>
+<string name="ocr_result">{b}Erkannter Text:{/b}</string>
+<string name="photo_no_text">Kein Text erkannt</string>
+<string name="qr_result">{b}QR-Code gefunden:{/b}</string>
+<string name="qr_no_text">Kein QR-Code gefunden</string>
+
+<string name="flood_warning">{b}WARNUNG:{/b} Zu viele Nachrichten. Bitte höre auf, zu spammen</string>
+
+<string name="translate_language_not_found">Unbekannte Sprache: {language}</string>
+<string name="translate_reply_to_message">Du musst auf eine Nachricht antworten, um die übersetzen zu können</string>
+
+<string name="privacy_policy">
+Wir speichern keinerlei persönliche Daten oder Dateien (z.B. Sprachnachrichten oder Bilder).
+Die einzigen Nutzerdaten, die wir erheben, ist die Telegram-Chat-ID zusammen mit deinen Einstellungen.
+Sprachnachrichten werden zur Transkription an {a href="https://wit.ai/terms"}wit.ai{/a} gesendet und direkt nach der Transkription gelöscht.
+Bilder werden direkt von unserem Server gelöscht, sobald die Text- oder QR-Erkennung abgeschlossen ist.
+Wir speichern keinerlei andere Nachrichteninhalte (Textnachrichten, Multimedia o.ä.)
+</string>
+
+<string name="unknown_api_key">{b}FEHLER:{/b} Ups, für die Sprache {language} konnte kein wit.ai API-Schlüssel gefunden werden. :(</string>
+
+</resources>
