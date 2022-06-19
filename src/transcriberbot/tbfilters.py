@@ -9,6 +9,9 @@ class FilterIsAdmin(BaseFilter):
     if message.chat.type == 'channel':
       return True
 
+    if message.from_user.id == 1087968824:
+      return True
+
     sender = message.from_user
     admins = message.chat.get_administrators()
 
@@ -22,7 +25,7 @@ chat_admin = FilterIsAdmin()
 class FilterIsOwner(BaseFilter):
   #def __init__(self):
     #self.admins = config.get_config_prop('telegram')['admins']
-  
+
   def filter(self, message):
     admins = config.get_config_prop('telegram')['admins']
     is_owner = list(filter(lambda admin: admin == str(message.chat.id), admins))
