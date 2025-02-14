@@ -4,8 +4,6 @@ import resources
 import database
 import antiflood
 
-from telegram.ext import Filters
-
 import transcriberbot
 from transcriberbot import TranscriberBot
 

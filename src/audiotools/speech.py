@@ -69,7 +69,7 @@ def __preprocess_audio(audio):
   return audio.set_sample_width(2).set_channels(1).set_frame_rate(8000)
 
 
-def transcribe(path, api_key):
+def transcribe_wit(path, api_key):
   logger.info("Transcribing file %s", path)
   audio = AudioSegment.from_file(path)
 
@@ -85,6 +85,13 @@ def transcribe(path, api_key):
     if text is not None:
       yield text
   transcriber.close()
+
+
+def transcribe(path, api_key, backend="wit"):
+  if backend == "wit":
+    return transcribe_wit(path, api_key)
+
+  raise ValueError("Unknown backend: %s" % backend)
 
 
 if __name__ == "__main__":
