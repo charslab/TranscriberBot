@@ -56,5 +56,9 @@
     "time_threshold_warning": 4,
     "time_threshold_flood": 5,
     "timeout": 10
+  },
+
+  "whisper": {
+    "api_endpoint": "http://192.168.5.2:8000"
   }
 }

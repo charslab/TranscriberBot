@@ -1,10 +1,12 @@
 import io
 import logging
 import traceback
+import os
 
 import requests
 import pydub
 from pydub import AudioSegment
+import config
 
 
 logger = logging.getLogger("speech")
@@ -87,9 +89,19 @@ def transcribe_wit(path, api_key):
   transcriber.close()
 
 
-def transcribe(path, api_key, backend="wit"):
+def transcribe_whisper(path):
+  resp = requests.get(f"{config.get_config_prop('app')['whisper']['api_endpoint']}/transcribe?file_id={path}")
+  yield resp.text
+
+
+def transcribe(path, api_key, backend="whisper"):
   if backend == "wit":
+    print("Transcribing with wit")
     return transcribe_wit(path, api_key)
+
+  elif backend == "whisper":
+    print("Transcribing with whisper")
+    return transcribe_whisper(os.path.basename(path))
 
   raise ValueError("Unknown backend: %s" % backend)
 
