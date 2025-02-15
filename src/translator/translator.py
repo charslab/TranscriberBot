@@ -21,6 +21,7 @@ def detect_language(text):
 
 
 def translate(source, target, text):
+  return "Translation service currently unavailable."
   global yandex_translate_url
 
   autodetect = detect_language(text)

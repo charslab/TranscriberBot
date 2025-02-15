@@ -2,8 +2,8 @@ import os, glob
 import json
 import functional
 import logging
-
 import pprint
+
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +15,7 @@ def parse_file(file):
   with open(file) as f:
     data = json.load(f)
   return data
+
 
 def init(config_folder):
   global __configs
@@ -35,6 +36,11 @@ def init(config_folder):
   if not os.path.isdir(__configs['app']['media_path']):
     os.mkdir(__configs['app']['media_path'])
 
+
 def get_config_prop(key):
   global __configs
   return __configs[key]
+
+
+def bot_token():
+    return get_config_prop("telegram")["token"]

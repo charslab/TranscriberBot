@@ -1,4 +1,4 @@
-python-telegram-bot==12.3.0
+wonda==0.7.9
 coloredlogs
 pillow
 watchdog

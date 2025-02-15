@@ -60,6 +60,7 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 <string name="flood_warning">{b}WARNING:{/b} Flood detected. Stop spamming please</string>
 
 <string name="translate_language_not_found">Unknown language: {language}</string>
+<string name="translate_language_missing">Please specify a language to translate to, e.g. "/translate english" </string>
 <string name="translate_reply_to_message">You must reply to a message in order to translate it</string>
 
 <string name="privacy_policy">
