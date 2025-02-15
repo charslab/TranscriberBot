@@ -9,7 +9,7 @@ import traceback
 import time
 
 import telegram
-from telegram import Update, Voice
+from telegram import Update, Voice, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ChatType
 from telegram.ext import ContextTypes
 
@@ -81,9 +81,10 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
     # TranscriberBot.get().start_thread(message_id)
     logger.debug("Starting thread %d", message_id)
 
-    # keyboard = InlineKeyboardMarkup(
-    #  [[InlineKeyboardButton("Stop", callback_data=message_id)]]
-    # )
+    keyboard = InlineKeyboardMarkup(
+      [[InlineKeyboardButton("Stop", callback_data=message_id)]]
+    )
+
 
     text = ""
     if is_group:
@@ -91,23 +92,27 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
     success = False
 
     try:
-        for speech in audiotools.transcribe(path, api_key):
+        for idx, (speech, n_chunks) in enumerate(audiotools.transcribe(path, api_key)):
+            print(f"Transcription idx={idx} n_chunks={n_chunks}, text={speech}")
+
+            suffix = f" <b>[{idx+1}/{n_chunks}]</b>" if idx < n_chunks - 1 else ""
+
             retry = True
             retry_num = 0
-
-            print("SPEECH:", speech)
-            while retry:  # and TranscriberBot.get().thread_running(message_id):
+            while retry: # Retry loop
                 try:
                     if len(text + " " + speech) >= 4000:
                         text = R.get_string_resource("transcription_continues", lang) + "\n"
                         message = await context.bot.send_message(
-                            chat_id, text + speech + " <b>[...]</b>",
-                            reply_to_message_id=message_id, parse_mode="html"
+                            chat_id, f"{text} {speech} {suffix}",
+                            reply_to_message_id=message_id, parse_mode="html",
+                            reply_markup=keyboard
                         )
                     else:
                         await context.bot.edit_message_text(
-                            text + " " + speech + " <b>[...]</b>", chat_id=chat_id,
-                            message_id=message_id, parse_mode="html"
+                            f"{text} {speech} {suffix}", chat_id=chat_id,
+                            message_id=message_id, parse_mode="html",
+                            reply_markup=keyboard
                         )
 
                     text += " " + speech
@@ -135,6 +140,7 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
 
     except Exception as e:
         logger.error("Could not transcribe audio")
+        raise e
 
     if not success:
         await context.bot.edit_message_text(

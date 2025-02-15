@@ -85,7 +85,7 @@ def transcribe_wit(path, api_key):
     logger.debug("Response received: %s", text)
 
     if text is not None:
-      yield text
+      yield text, len(chunks)
   transcriber.close()
 
 
@@ -122,7 +122,7 @@ if __name__ == "__main__":
       output = open(args.output_filename, mode="w")
 
   result = transcribe(args.input_filename, args.api_key)
-  for part in result:
+  for part, tot in result:
       output.write(part + "\n")
       output.flush()
 
