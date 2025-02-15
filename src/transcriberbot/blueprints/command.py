@@ -25,6 +25,7 @@ async def start(m: Message):
 async def rate(m: Message):
     await m.answer(R.get_string_resource("message_rate", TBDB.get_chat_lang(m.chat.id)))
 
+
 @bp.on.message(Command("disable_voice") & ChatAdmin())
 async def disable_voice(m: Message):
     chat_id = m.chat.id
