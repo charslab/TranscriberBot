@@ -94,7 +94,7 @@ def transcribe_whisper(path):
   yield resp.text
 
 
-def transcribe(path, api_key, backend="whisper"):
+def transcribe(path, api_key, backend="wit"):
   if backend == "wit":
     print("Transcribing with wit")
     return transcribe_wit(path, api_key)
