@@ -183,7 +183,7 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
 
 
     except CancelledError:
-        print("Task cancelled")
+        logging.debug("Task cancelled")
         await context.bot.edit_message_text(
             message.text + " " + R.get_string_resource("transcription_stopped", lang), chat_id=chat_id,
             message_id=message.message_id, parse_mode="html"

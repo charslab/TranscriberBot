@@ -26,6 +26,7 @@ class AllowedDocument(UpdateFilter):
 
     def filter(self, update: Update) -> bool:
         if update.effective_message.document:
+            logging.debug("Received document %s", update.effective_message.document.file_id)
             filename = update.effective_message.document.file_name
             if '.' not in filename:  # No extension
                 return False
