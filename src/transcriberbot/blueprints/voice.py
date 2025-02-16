@@ -7,7 +7,6 @@ import logging
 import os
 import traceback
 from asyncio import CancelledError
-from concurrent.futures.process import ProcessPoolExecutor
 
 import telegram
 from telegram import Update, Voice, InlineKeyboardMarkup, InlineKeyboardButton, VideoNote, Document
@@ -21,6 +20,8 @@ from database import TBDB
 
 logger = logging.getLogger(__name__)
 
+
+# TODO: check if cpu usage is too high, if so, use ProcessPoolExecutor
 
 async def voice_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if TBDB.get_chat_voice_enabled(update.effective_chat.id) == 0:
