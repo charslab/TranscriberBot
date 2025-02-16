@@ -80,10 +80,9 @@ class TBDB():
         if not chat_record:
             logger.debug("Record for chat {} not found, creating one.".format(chat_id))
             TBDB.create_default_chat_entry(chat_id, "en-US")
+            return "en-US"
 
-        with TBDB._get_db() as db:
-            cursor = db.execute("SELECT lang FROM chats WHERE chat_id='{0}'".format(chat_id))
-            return cursor.fetchone()[0]
+        return chat_record["lang"]
 
     @staticmethod
     def set_chat_lang(chat_id, lang):
