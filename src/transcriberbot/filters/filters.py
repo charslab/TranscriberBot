@@ -25,6 +25,9 @@ class AllowedDocument(UpdateFilter):
             logging.warning("No allowed extensions were provided. Documents will be disabled")
 
     def filter(self, update: Update) -> bool:
+        if update.effective_message.animation:
+            return False
+
         if update.effective_message.document:
             logging.debug("Received document %s", update.effective_message.document.file_id)
             filename = update.effective_message.document.file_name
