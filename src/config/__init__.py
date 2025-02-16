@@ -4,6 +4,8 @@ import functional
 import logging
 import pprint
 
+APP_LOG = 25
+
 logger = logging.getLogger(__name__)
 
 __configs = {}
@@ -62,3 +64,7 @@ def get_document_extensions():
     audio_ext = get_audio_extensions()
     video_ext = get_video_extensions()
     return audio_ext + video_ext
+
+
+def get_bot_admins():
+    return [int(id) for id in get_config_prop("telegram")["admins"]]

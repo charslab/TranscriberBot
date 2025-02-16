@@ -8,23 +8,9 @@ from telegram.constants import ChatType
 from telegram.ext.filters import UpdateFilter
 from telegram import Update, ChatMember
 
-logger = logging.getLogger(__name__)
+import config
 
 
-# class Voice(ABCRule[MessageUpdate]):
-#     async def check(self, m: MessageUpdate, _) -> bool:
-#         return bool(m.voice)
-#
-# class Audio(ABCRule[MessageUpdate]):
-#     async def check(self, m: MessageUpdate, _) -> bool:
-#         return bool(m.audio)
-#
-#
-# class VideoNote(ABCRule[MessageUpdate]):
-#     async def check(self, m: MessageUpdate, _) -> bool:
-#         return bool(m.video_note)
-#
-#
 class AllowedDocument(UpdateFilter):
     """
     Checks if the message has document media with allowed extensions.
@@ -34,7 +20,7 @@ class AllowedDocument(UpdateFilter):
         super().__init__()
         self.allowed_exts = allowed_exts
         if len(allowed_exts) == 0:
-            logger.warning("No allowed extensions were provided. Documents will be disabled")
+            logging.warning("No allowed extensions were provided. Documents will be disabled")
 
     def filter(self, update: Update) -> bool:
         if update.effective_message.document:
@@ -63,9 +49,24 @@ class ChatAdmin(UpdateFilter):
             return True
 
         user = update.effective_user
-        chat_admins: list[ChatMember] = update.effective_chat.get_administrators()
+        chat_admins: list[ChatMember] = await update.effective_chat.get_administrators()
 
         is_admin = list(filter(lambda admin: admin.user.id == user.id, chat_admins))
+        is_admin = len(is_admin) > 0
+
+        return is_admin
+
+
+class BotAdmin(UpdateFilter):
+    """
+    Checks if the message was sent by the bot admin.
+    """
+
+    def filter(self, update: Update) -> bool:
+        user = update.effective_user
+        bot_admins = config.get_bot_admins()
+
+        is_admin = list(filter(lambda admin_id: admin_id == user.id, bot_admins))
         is_admin = len(is_admin) > 0
 
         return is_admin

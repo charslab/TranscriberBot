@@ -1,4 +1,5 @@
-import coloredlogs
+import logging
+
 import config
 import resources
 import database
@@ -6,18 +7,17 @@ import antiflood
 import transcriberbot.bot
 
 
-# import transcriberbot.multiprocessing
-
-
 def main():
-    coloredlogs.install(
-        level='WARNING',
-        fmt='%(asctime)s - %(name)s - %(levelname)s - %(filename)s [%(funcName)s:%(lineno)d] - %(message)s'
-    )
-
     config.init('../config')
-    # transcriberbot.multiprocessing.init()
-    # print("VOICE POOL:", transcriberbot.multiprocessing.voice_pool())
+
+    logging.addLevelName(config.APP_LOG, "APP")
+
+    log_level = config.get_config_prop("app")["logging"]["level"]
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(filename)s [%(funcName)s:%(lineno)d] - %(message)s',
+        level=log_level
+    )
+    logging.log(config.APP_LOG, "Setting log level to %s", log_level)
 
     resources.init("../values")
     antiflood.init()

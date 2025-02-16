@@ -4,6 +4,7 @@ Date: 15/02/25
 """
 import logging
 import asyncio
+import traceback
 
 from telegram import Update
 from telegram.ext import ContextTypes
@@ -13,7 +14,6 @@ import resources as R
 import translator
 from database import TBDB
 
-logger = logging.getLogger(__name__)
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -87,7 +87,7 @@ async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     lang = update.effective_message.text
     lang = lang.replace("/translate", "").strip()
-    logger.debug("Language %s", lang)
+    logging.debug("Language %s", lang)
 
     if not update.effective_message.reply_to_message:
         await context.bot.send_message(
@@ -141,7 +141,7 @@ async def welcome_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         language = chat_record["lang"]
     elif update.effective_user.language_code is not None:
         # Channel posts do not have a language_code attribute
-        logger.info("Language_code: %s", update.effective_user.language_code)
+        logging.debug("Language_code: %s", update.effective_user.language_code)
         language = update.effective_user.language_code
 
     message = R.get_string_resource("message_welcome", language)
@@ -157,7 +157,7 @@ async def welcome_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if len(language) < 5:
             language = R.iso639_2_to_639_1(language)
 
-        logger.info("No record found for chat {}, creating one with lang {}".format(update.effective_chat.id, language))
+        logging.debug("No record found for chat {}, creating one with lang {}".format(update.effective_chat.id, language))
         TBDB.create_default_chat_entry(update.effective_chat.id, language)
 
 
@@ -167,3 +167,43 @@ async def set_language(update: Update, context: ContextTypes.DEFAULT_TYPE, langu
     TBDB.set_chat_lang(chat_id, lang_)
     message = R.get_string_resource("language_set", lang_).replace("{lang}", language)
     await context.bot.send_message(chat_id, message, parse_mode="html")
+
+
+async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    tot_chats = TBDB.get_chats_num()
+    active_chats = TBDB.get_active_chats_num()
+    await context.bot.send_message(
+        chat_id=chat_id, text='Total users: {}\nActive users: {}'.format(tot_chats, active_chats), parse_mode='html',
+    )
+
+
+async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    text = " ".join(context.args)
+
+    async def __post():
+        chats = TBDB.get_chats()
+        sent = 0
+
+        for chat in chats:
+            try:
+                await context.bot.send_message(
+                    chat_id=chat['chat_id'],
+                    text=text,
+                    parse_mode='html',
+                )
+                sent += 1
+                await asyncio.sleep(0.1)
+            except Exception as e:
+                logging.error(
+                    "Exception sending broadcast to %d: (%s) %s",
+                    chat['chat_id'], e, traceback.format_exc()
+                )
+
+        await context.bot.send_message(
+            chat_id=chat_id,
+            text='Broadcast sent to {}/{} chats'.format(sent, len(chats)),
+        )
+
+    await __post()
