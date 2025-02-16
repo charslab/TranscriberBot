@@ -21,5 +21,7 @@ async def chat_member_update(update: Update, context: ContextTypes.DEFAULT_TYPE)
         TBDB.set_chat_active(chat_id, False)
         logging.log(config.APP_LOG, f"Chat {chat_id} deactivated")
     else:
-        # TBDB.set_chat_active(chat_id, True)
-        logging.log(config.APP_LOG, f"Chat {chat_id} activated")
+        chat_record = TBDB.get_chat_entry(chat_id)
+        if chat_record:
+            TBDB.set_chat_active(chat_id, 1)
+            logging.log(config.APP_LOG, f"Chat {chat_id} reactivated")
