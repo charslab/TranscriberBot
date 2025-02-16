@@ -1,5 +1,4 @@
 # TranscriberBot-specific ignores
-config/
 media/
 
 # Generic data-related ignores

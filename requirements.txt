@@ -6,3 +6,4 @@ watchdog
 pydub
 zbarlight
 requests
+sentry-sdk
