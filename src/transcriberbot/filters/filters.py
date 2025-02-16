@@ -3,8 +3,10 @@ Author: Carlo Alberto Barbano <carlo.alberto.barbano@outlook.com>
 Date: 15/02/25
 """
 import logging
+import asyncio
 
 from telegram.constants import ChatType
+from telegram.ext import ContextTypes
 from telegram.ext.filters import UpdateFilter
 from telegram import Update, ChatMember
 
@@ -44,17 +46,32 @@ class ChatAdmin(UpdateFilter):
     Checks if the message was sent by a chat admin.
     """
 
-    async def filter(self, update: Update) -> bool:
+    def filter(self, update: Update) -> bool:
         if update.effective_chat.type in (ChatType.PRIVATE, ChatType.CHANNEL):
             return True
 
         user = update.effective_user
-        chat_admins: list[ChatMember] = await update.effective_chat.get_administrators()
+        chat_admins: list[ChatMember] = asyncio.get_event_loop().run_until_complete(
+            update.effective_chat.get_administrators())
 
         is_admin = list(filter(lambda admin: admin.user.id == user.id, chat_admins))
         is_admin = len(is_admin) > 0
 
         return is_admin
+
+
+async def chat_admin(update: Update, context: ContextTypes.DEFAULT_TYPE, callback):
+    if update.effective_chat.type in (ChatType.PRIVATE, ChatType.CHANNEL):
+        return True
+
+    user = update.effective_user
+    chat_admins: list[ChatMember] = await update.effective_chat.get_administrators()
+
+    is_admin = list(filter(lambda admin: admin.user.id == user.id, chat_admins))
+    is_admin = len(is_admin) > 0
+
+    if is_admin:
+        return await callback(update, context)
 
 
 class BotAdmin(UpdateFilter):
