@@ -2,11 +2,12 @@
 Author: Carlo Alberto Barbano <carlo.alberto.barbano@outlook.com>
 Date: 15/02/25
 """
+from telegram import Update
 
 import config
 import logging
 
-from telegram.ext import MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes, CallbackQueryHandler
 from functools import partial
 from transcriberbot.blueprints import commands, messages, voice
 from transcriberbot.blueprints.commands import set_language
@@ -16,11 +17,16 @@ from transcriberbot.filters import ChatAdmin, FromPrivate
 
 
 def run(bot_token: str):
-    application = ApplicationBuilder().token(bot_token).build()
+    application = (ApplicationBuilder()
+                   .token(bot_token)
+                   .concurrent_updates(True)
+                   .build())
 
     logger = logging.getLogger(__name__)
 
     logging.info("Installing handlers")
+    application.add_handler(CallbackQueryHandler(voice.stop_task))
+
     application.add_handler(CommandHandler('start', commands.start, filters=ChatAdmin()))
     application.add_handler(CommandHandler('help', commands.start, filters=ChatAdmin()))
     application.add_handler(CommandHandler('lang', commands.lang, filters=ChatAdmin()))
@@ -41,9 +47,9 @@ def run(bot_token: str):
             CommandHandler(language, partial(set_language, language=language), filters=ChatAdmin())
         )
 
-    application.add_handler(MessageHandler(VOICE, voice.voice_message))
+    application.add_handler(MessageHandler(VOICE, voice.voice_message, block=False))
 
     application.add_handler(MessageHandler(FromPrivate(), messages.private_message))
 
     logger.info("Starting bot..")
-    application.run_polling()
+    application.run_polling(allowed_updates=Update.ALL_TYPES)

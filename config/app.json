@@ -59,6 +59,6 @@
   },
 
   "whisper": {
-    "api_endpoint": "http://192.168.5.2:8000"
+    "api_endpoint": "http://127.0.0.1:8000"
   }
 }

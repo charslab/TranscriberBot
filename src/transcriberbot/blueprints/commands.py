@@ -3,6 +3,7 @@ Author: Carlo Alberto Barbano <carlo.alberto.barbano@outlook.com>
 Date: 15/02/25
 """
 import logging
+import asyncio
 
 from telegram import Update
 from telegram.ext import ContextTypes
