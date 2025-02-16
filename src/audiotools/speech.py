@@ -34,9 +34,9 @@ class WitTranscriber:
             loop = asyncio.get_event_loop()
             response = await loop.run_in_executor(
                 None, partial(self.session.post,
-                url=self.speech_url,
-                params={"verbose": True},
-                data=io.BufferedReader(io.BytesIO(chunk.raw_data)))
+                              url=self.speech_url,
+                              params={"verbose": True},
+                              data=io.BufferedReader(io.BytesIO(chunk.raw_data)))
             )
 
             logger.debug("Request response %s", response.text)

@@ -16,9 +16,10 @@ TABLE STATS
 
 """
 
+
 def init_schema(database):
-  with Database(database) as db:
-    db.execute("""CREATE TABLE IF NOT EXISTS chats (
+    with Database(database) as db:
+        db.execute("""CREATE TABLE IF NOT EXISTS chats (
       chat_id INTEGER PRIMARY KEY, 
       lang VARCHAR(5) NOT NULL, 
       voice_enabled INTEGER,
@@ -28,7 +29,7 @@ def init_schema(database):
       ban INTEGER)
     """)
 
-    db.execute("""CREATE TABLE IF NOT EXISTS stats (
+        db.execute("""CREATE TABLE IF NOT EXISTS stats (
       month_year INTEGER PRIMARY KEY, 
       audio_num INTEGER, 
       min_tot_audio INTEGER,
