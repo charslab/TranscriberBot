@@ -27,6 +27,8 @@ class AllowedDocument(UpdateFilter):
     def filter(self, update: Update) -> bool:
         if update.effective_message.document:
             filename = update.effective_message.document.file_name
+            if '.' not in filename:  # No extension
+                return False
             ext = filename.split('.')[-1]
             return ext in self.allowed_exts
         return False
