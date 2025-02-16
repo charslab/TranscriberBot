@@ -48,3 +48,17 @@ def bot_token():
 
 def get_language_list():
     return get_config_prop("app")["languages"].keys()
+
+
+def get_audio_extensions():
+    return get_config_prop("app").get("audio_ext", [])
+
+
+def get_video_extensions():
+    return get_config_prop("app").get("video_ext", [])
+
+
+def get_document_extensions():
+    audio_ext = get_audio_extensions()
+    video_ext = get_video_extensions()
+    return audio_ext + video_ext

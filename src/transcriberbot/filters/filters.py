@@ -11,7 +11,6 @@ from telegram import Update, ChatMember
 logger = logging.getLogger(__name__)
 
 
-
 # class Voice(ABCRule[MessageUpdate]):
 #     async def check(self, m: MessageUpdate, _) -> bool:
 #         return bool(m.voice)
@@ -26,28 +25,30 @@ logger = logging.getLogger(__name__)
 #         return bool(m.video_note)
 #
 #
-# class Document(ABCRule[MessageUpdate]):
-#     """
-#     Checks if the message has voice media
-#     """
-#
-#     def __init__(self, *allowed_exts) -> None:
-#         self.allowed_exts = allowed_exts
-#         if len(allowed_exts) == 0:
-#             logger.warning("No allowed extensions were provided. Documents will be disabled")
-#
-#     async def check(self, m: MessageUpdate, _) -> bool:
-#         if m.document:
-#             filename = m.document.file_name
-#             ext = filename.split('.')[-1]
-#             return ext in self.allowed_exts
-#
-#         return False
+class AllowedDocument(UpdateFilter):
+    """
+    Checks if the message has document media with allowed extensions.
+    """
+
+    def __init__(self, allowed_exts) -> None:
+        super().__init__()
+        self.allowed_exts = allowed_exts
+        if len(allowed_exts) == 0:
+            logger.warning("No allowed extensions were provided. Documents will be disabled")
+
+    def filter(self, update: Update) -> bool:
+        if update.effective_message.document:
+            filename = update.effective_message.document.file_name
+            ext = filename.split('.')[-1]
+            return ext in self.allowed_exts
+        return False
+
 
 class FromPrivate(UpdateFilter):
     """
     Checks if the message was sent in a private conversation.
     """
+
     def filter(self, update: Update) -> bool:
         return update.effective_chat.type == ChatType.PRIVATE
 
@@ -56,6 +57,7 @@ class ChatAdmin(UpdateFilter):
     """
     Checks if the message was sent by a chat admin.
     """
+
     async def filter(self, update: Update) -> bool:
         if update.effective_chat.type in (ChatType.PRIVATE, ChatType.CHANNEL):
             return True

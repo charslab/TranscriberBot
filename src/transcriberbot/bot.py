@@ -12,8 +12,8 @@ from functools import partial
 from transcriberbot.blueprints import commands, messages, voice
 from transcriberbot.blueprints.commands import set_language
 
-from telegram.ext.filters import VOICE
-from transcriberbot.filters import ChatAdmin, FromPrivate
+from telegram.ext.filters import VOICE, VIDEO_NOTE, AUDIO
+from transcriberbot.filters import ChatAdmin, FromPrivate, AllowedDocument
 
 
 def run(bot_token: str):
@@ -47,7 +47,10 @@ def run(bot_token: str):
             CommandHandler(language, partial(set_language, language=language), filters=ChatAdmin())
         )
 
-    application.add_handler(MessageHandler(VOICE, voice.voice_message, block=False))
+    application.add_handler(MessageHandler(VOICE, voice.voice_message))
+    application.add_handler(MessageHandler(AUDIO, voice.audio_message))
+    application.add_handler(MessageHandler(VIDEO_NOTE, voice.video_note_message))
+    application.add_handler(MessageHandler(AllowedDocument(config.get_document_extensions()), voice.document_message))
 
     application.add_handler(MessageHandler(FromPrivate(), messages.private_message))
 

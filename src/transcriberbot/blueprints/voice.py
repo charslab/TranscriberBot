@@ -10,7 +10,7 @@ from asyncio import CancelledError
 from concurrent.futures.process import ProcessPoolExecutor
 
 import telegram
-from telegram import Update, Voice, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, Voice, InlineKeyboardMarkup, InlineKeyboardButton, VideoNote, Document
 from telegram.constants import ChatType
 from telegram.ext import ContextTypes
 
@@ -26,36 +26,46 @@ async def voice_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     if TBDB.get_chat_voice_enabled(update.effective_chat.id) == 0:
         return
 
-    # with ProcessPoolExecutor() as pool:
-    #     task: asyncio.Task = asyncio.get_event_loop().run_in_executor(
-    #         pool, process_media_voice, context, update.effective_message.voice, "voice"
-    #     )
-
-    task: asyncio.Task = context.application.create_task(
-        process_media_voice(update, context, update.effective_message.voice, "voice")
-    )
-
+    task = asyncio.create_task(process_media_voice(update, context, update.effective_message.voice, "voice"))
     context.bot_data[update.effective_message.message_id] = task
-    print("TASK ID", update.effective_message.message_id)
-    print(context.bot_data)
+
+
+async def audio_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if TBDB.get_chat_voice_enabled(update.effective_chat.id) == 0:
+        return
+
+    task = asyncio.create_task(process_media_voice(update, context, update.effective_message.audio, "audio"))
+    context.bot_data[update.effective_message.message_id] = task
+
+
+async def video_note_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if TBDB.get_chat_voice_enabled(update.effective_chat.id) == 0:
+        return
+
+    task = asyncio.create_task(process_media_voice(update, context, update.effective_message.video_note, "video_note"))
+    context.bot_data[update.effective_message.message_id] = task
+
+
+async def document_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if TBDB.get_chat_voice_enabled(update.effective_chat.id) == 0:
+        return
+
+    task = asyncio.create_task(process_media_voice(update, context, update.effective_message.document, "document"))
+    context.bot_data[update.effective_message.message_id] = task
 
 
 async def stop_task(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    task_id = update.callback_query.data
+    task_id = int(update.callback_query.data)
     task: asyncio.Task = context.bot_data.get(task_id)
-    print("CANCELLING TASK:", task_id, task)
-    print("CONTEXT BOT DATA", context.bot_data)
 
     if task is not None:
         task.cancel()
-        await context.bot.edit_message_text(
-            update.message.text + " " + R.get_string_resource("transcription_stopped", TBDB.get_chat_lang(update.effective_chat.id)),
-            chat_id=update.effective_chat.id, message_id=task_id, parse_mode="html"
-        )
     else:
         print("Task not found")
 
-async def process_media_voice(update: Update, context: ContextTypes.DEFAULT_TYPE, media: Voice, name: str) -> None:
+
+async def process_media_voice(update: Update, context: ContextTypes.DEFAULT_TYPE, media: [Voice | VideoNote | Document],
+                              name: str) -> None:
     chat_id = update.effective_chat.id
     file_size = media.file_size
     max_size = config.get_config_prop("app").get("max_media_voice_file_size", 20 * 1024 * 1024)
@@ -75,7 +85,7 @@ async def process_media_voice(update: Update, context: ContextTypes.DEFAULT_TYPE
 
     try:
         await transcribe_audio_file(update, context, file_path)
-    except Exception as e:
+    except Exception:
         logger.error("Exception handling %s from %d: %s", name, chat_id, traceback.format_exc())
     finally:
         os.remove(file_path)
@@ -111,67 +121,80 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
     text = ""
     if is_group:
         text = R.get_string_resource("transcription_text", lang) + "\n"
-    success = False
 
     try:
         async for idx, speech, n_chunks in audiotools.transcribe(path, api_key):
             print(f"Transcription idx={idx} n_chunks={n_chunks}, text={speech}")
-
             suffix = f" <b>[{idx + 1}/{n_chunks}]</b>" if idx < n_chunks - 1 else ""
+            reply_markup = keyboard if idx < n_chunks - 1 else None
 
-            retry = True
-            retry_num = 0
-            while retry:  # Retry loop
-                try:
-                    if len(text + " " + speech) >= 4000:
-                        text = R.get_string_resource("transcription_continues", lang) + "\n"
-                        message = await context.bot.send_message(
-                            chat_id, f"{text} {speech} {suffix}",
-                            reply_to_message_id=message.message_id, parse_mode="html",
-                            reply_markup=keyboard
-                        )
-                    else:
-                        await context.bot.edit_message_text(
-                            f"{text} {speech} {suffix}", chat_id=chat_id,
-                            message_id=message.message_id, parse_mode="html",
-                            reply_markup=keyboard
-                        )
+            if len(text + " " + speech) >= 4000:
+                text = R.get_string_resource("transcription_continues", lang) + "\n"
+                message = await context.bot.send_message(
+                    chat_id, f"{text} {speech} {suffix}",
+                    reply_to_message_id=message.message_id, parse_mode="html",
+                    reply_markup=reply_markup
+                )
+            else:
+                message = await context.bot.edit_message_text(
+                    f"{text} {speech} {suffix}", chat_id=chat_id,
+                    message_id=message.message_id, parse_mode="html",
+                    reply_markup=reply_markup
+                )
 
-                    text += " " + speech
-                    retry = False
-                    success = True
+            text = f"{text} {speech}"
 
-                except telegram.error.TimedOut as e:
-                    print(e)
-                    logger.error("Timeout error %s", traceback.format_exc())
-                    retry_num += 1
-                    if retry_num >= 3:
-                        retry = False
+            # retry_num = 0
+            # retry = True
+            # while retry:  # Retry loop
+            #     try:
+            #         if len(text + " " + speech) >= 4000:
+            #             text = R.get_string_resource("transcription_continues", lang) + "\n"
+            #             message = await context.bot.send_message(
+            #                 chat_id, f"{text} {speech} {suffix}",
+            #                 reply_to_message_id=message.message_id, parse_mode="html",
+            #                 reply_markup=keyboard
+            #             )
+            #         else:
+            #             message = await context.bot.edit_message_text(
+            #                 f"{text} {speech} {suffix}", chat_id=chat_id,
+            #                 message_id=message.message_id, parse_mode="html",
+            #                 reply_markup=keyboard
+            #             )
+            #
+            #         text += " " + speech
+            #         retry = False
+            #
+            #     except telegram.error.TimedOut as e:
+            #         print(e)
+            #         logger.error("Timeout error %s", traceback.format_exc())
+            #         retry_num += 1
+            #         if retry_num >= 3:
+            #             retry = False
+            #
+            #     except telegram.error.RetryAfter as r:
+            #         logger.warning("Retrying after %d", r.retry_after)
+            #         await asyncio.sleep(r.retry_after)
+            #
+            #     except telegram.error.TelegramError:
+            #         logger.error("Telegram error %s", traceback.format_exc())
+            #         retry = False
 
-                except telegram.error.RetryAfter as r:
-                    logger.warning("Retrying after %d", r.retry_after)
-                    await asyncio.sleep(r.retry_after)
 
-                except telegram.error.TelegramError as te:
-                    logger.error("Telegram error %s", traceback.format_exc())
-                    retry = False
-
-                except CancelledError as ce:
-                    logger.error("Task cancelled")
-                    raise ce
-
-                except Exception as e:
-                    logger.error("Exception %s", traceback.format_exc())
-                    raise e
-
+    except CancelledError:
+        print("Task cancelled")
+        await context.bot.edit_message_text(
+            message.text + " " + R.get_string_resource("transcription_stopped", lang), chat_id=chat_id,
+            message_id=message.message_id, parse_mode="html"
+        )
+        return
 
     except Exception as e:
         logger.error("Could not transcribe audio")
-        raise e
 
-    if not success:
         await context.bot.edit_message_text(
             R.get_string_resource("transcription_failed", lang), chat_id=chat_id,
             message_id=message.message_id, parse_mode="html"
         )
 
+        raise e
