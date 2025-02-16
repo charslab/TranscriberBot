@@ -61,14 +61,15 @@ class ChatAdmin(UpdateFilter):
 
 
 async def chat_admin(update: Update, context: ContextTypes.DEFAULT_TYPE, callback):
+
     if update.effective_chat.type in (ChatType.PRIVATE, ChatType.CHANNEL):
-        return True
+        is_admin = True
+    else:
+        user = update.effective_user
+        chat_admins: list[ChatMember] = await update.effective_chat.get_administrators()
 
-    user = update.effective_user
-    chat_admins: list[ChatMember] = await update.effective_chat.get_administrators()
-
-    is_admin = list(filter(lambda admin: admin.user.id == user.id, chat_admins))
-    is_admin = len(is_admin) > 0
+        is_admin = list(filter(lambda admin: admin.user.id == user.id, chat_admins))
+        is_admin = len(is_admin) > 0
 
     if is_admin:
         return await callback(update, context)
