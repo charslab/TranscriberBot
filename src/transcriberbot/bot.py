@@ -10,10 +10,10 @@ import logging
 from telegram.ext import MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes, CallbackQueryHandler, \
     ChatMemberHandler
 from functools import partial
-from transcriberbot.blueprints import commands, messages, voice, chat_handlers
+from transcriberbot.blueprints import commands, messages, voice, photos, chat_handlers
 from transcriberbot.blueprints.commands import set_language
 
-from telegram.ext.filters import VOICE, VIDEO_NOTE, AUDIO
+from telegram.ext.filters import VOICE, VIDEO_NOTE, AUDIO, PHOTO
 from transcriberbot.filters import chat_admin, FromPrivate, AllowedDocument, BotAdmin
 
 
@@ -66,6 +66,8 @@ def run(bot_token: str):
     application.add_handler(MessageHandler(AUDIO, voice.audio_message))
     application.add_handler(MessageHandler(VIDEO_NOTE, voice.video_note_message))
     application.add_handler(MessageHandler(AllowedDocument(config.get_document_extensions()), voice.document_message))
+
+    application.add_handler(MessageHandler(PHOTO, photos.photo))
 
     application.add_handler(MessageHandler(FromPrivate(), messages.private_message))
 

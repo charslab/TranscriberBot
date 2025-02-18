@@ -5,7 +5,7 @@ from PIL import Image
 logger = logging.getLogger(__name__)
 
 
-def read_qr(path, lang):
+def read_qr(path):
     logger.info("opening %s", path)
 
     with open(path, 'rb') as f:
