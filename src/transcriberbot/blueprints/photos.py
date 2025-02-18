@@ -9,6 +9,7 @@ import traceback
 
 import telegram
 from telegram import Update
+from telegram.constants import ChatType
 from telegram.ext import ContextTypes
 
 import config
@@ -18,8 +19,8 @@ from database import TBDB
 
 
 async def photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    photo_enabled = TBDB.get_chat_photos_enabled(update.effective_chat.id)
-    qr_enabled = TBDB.get_chat_qr_enabled(update.effective_chat.id)
+    photo_enabled = update.effective_chat.type == ChatType.PRIVATE or TBDB.get_chat_photos_enabled(update.effective_chat.id)
+    qr_enabled = update.effective_chat.type == ChatType.PRIVATE or TBDB.get_chat_qr_enabled(update.effective_chat.id)
 
     if not photo_enabled and not qr_enabled:
         return
@@ -39,8 +40,7 @@ async def process_media_photo(update: Update, context: ContextTypes.DEFAULT_TYPE
     await file.download_to_drive(file_path)
 
     try:
-        qr_enabled = TBDB.get_chat_qr_enabled(update.effective_chat.id)
-        if qr_enabled:
+        if update.effective_chat.type == ChatType.PRIVATE or TBDB.get_chat_qr_enabled(update.effective_chat.id):
             qr = phototools.read_qr(file_path)
             if qr is not None:
                 qr = R.get_string_resource("qr_result", lang) + f"\n{qr}"
@@ -51,8 +51,7 @@ async def process_media_photo(update: Update, context: ContextTypes.DEFAULT_TYPE
                 )
                 return
 
-        photo_enabled = TBDB.get_chat_photos_enabled(update.effective_chat.id)
-        if photo_enabled:
+        if update.effective_chat.type == ChatType.PRIVATE or TBDB.get_chat_photos_enabled(update.effective_chat.id):
             text = phototools.image_ocr(file_path, lang)
             if text is not None:
                 text = R.get_string_resource("ocr_result", lang) + "\n" + html.escape(text)
