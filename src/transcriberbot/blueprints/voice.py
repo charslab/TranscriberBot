@@ -6,6 +6,7 @@ import asyncio
 import logging
 import os
 import traceback
+import datetime
 from asyncio import CancelledError
 
 import telegram
@@ -54,7 +55,7 @@ async def document_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 async def stop_task(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     task_id = int(update.callback_query.data)
-    task: asyncio.Task = context.bot_data.get(task_id)
+    task: asyncio.Task = context.bot_data.get(task_id)["task"]
 
     if task is not None:
         task.cancel()
@@ -75,13 +76,17 @@ async def wait_for_task_queue(context: ContextTypes.DEFAULT_TYPE):
     logging.debug("Task queue has available space")
 
 
-async def run_voice_task(update: Update, context: ContextTypes.DEFAULT_TYPE, media: [Voice | VideoNote | Document],
+async def run_voice_task(update: Update, context: ContextTypes.DEFAULT_TYPE, media: Voice,
                          name):
     await wait_for_task_queue(context)
 
     try:
         task = asyncio.create_task(process_media_voice(update, context, media, name))
-        context.bot_data[update.effective_message.message_id] = task
+        context.bot_data[update.effective_message.message_id] = {
+            'task': task,
+            'duration': media.duration,
+            'time': datetime.datetime.now(datetime.timezone.utc)
+        }
         await asyncio.gather(task)
     finally:
         context.bot_data.pop(update.effective_message.message_id)

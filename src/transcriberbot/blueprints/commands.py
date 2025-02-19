@@ -5,6 +5,7 @@ Date: 15/02/25
 import logging
 import asyncio
 import traceback
+import datetime
 
 from telegram import Update
 from telegram.ext import ContextTypes
@@ -179,12 +180,18 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    num_audios = len(context.bot_data)
+    num_audios = len(context.bot_data) - 1
     num_queues = context.bot_data.get('queue_len', 0)
+
+    audio_queue = [f"{audio_id} duration {datetime.timedelta(seconds=v['duration'])} (received {v['time']}" for
+                   audio_id, v in
+                   context.bot_data.items() if
+                   audio_id != 'queue_len']
+
     await context.bot.send_message(
         update.effective_chat.id, f"Number of audios being currently processed: {num_audios}\n"
                                   f"Number of audios in queue: {num_queues}\n\n"
-                                  f"{list(context.bot_data.keys())}"
+                                  f"{'\n'.join(audio_queue)}"
     )
 
 
