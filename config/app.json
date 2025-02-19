@@ -49,6 +49,10 @@
     "webm"
   ],
 
+  "ocr": {
+    "tesseract_path": "/usr/share/tesseract-ocr/5/tessdata/"
+  },
+
   "antiflood": {
     "age_threshold": 10,
     "flood_ratio": 2,
