@@ -107,11 +107,11 @@ async def transcribe_whisper(path):
 
 def transcribe(path, api_key, backend="wit"):
     if backend == "wit":
-        print("Transcribing with wit")
+        logging.debug("Transcribing with wit")
         return transcribe_wit(path, api_key)
 
     elif backend == "whisper":
-        print("Transcribing with whisper")
+        logging.debug("Transcribing with whisper")
         return transcribe_whisper(os.path.basename(path))
 
     raise ValueError("Unknown backend: %s" % backend)

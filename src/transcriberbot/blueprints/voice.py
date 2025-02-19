@@ -62,7 +62,7 @@ async def stop_task(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if task is not None:
         task.cancel()
     else:
-        print("Task not found")
+        logging.warning("Task not found")
 
 
 async def process_media_voice(update: Update, context: ContextTypes.DEFAULT_TYPE, media: [Voice | VideoNote | Document],
@@ -125,7 +125,7 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
 
     try:
         async for idx, speech, n_chunks in audiotools.transcribe(path, api_key):
-            print(f"Transcription idx={idx} n_chunks={n_chunks}, text={speech}")
+            logging.debug(f"Transcription idx={idx} n_chunks={n_chunks}, text={speech}")
             suffix = f" <b>[{idx + 1}/{n_chunks}]</b>" if idx < n_chunks - 1 else ""
             reply_markup = keyboard if idx < n_chunks - 1 else None
 
