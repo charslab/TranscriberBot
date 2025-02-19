@@ -60,6 +60,7 @@ def run(bot_token: str):
     logging.log(config.APP_LOG, "Installing admin controls")
     application.add_handler(CommandHandler("users", commands.users, filters=BotAdmin()))
     application.add_handler(CommandHandler("broadcast", commands.broadcast, filters=BotAdmin()))
+    application.add_handler(CommandHandler("stats", commands.stats, filters=BotAdmin()))
 
     logging.log(config.APP_LOG, "Installing message handlers")
     application.add_handler(MessageHandler(VOICE, voice.voice_message))

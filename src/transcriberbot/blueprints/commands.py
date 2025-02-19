@@ -15,7 +15,6 @@ import translator
 from database import TBDB
 
 
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await welcome_message(update, context)
 
@@ -157,7 +156,8 @@ async def welcome_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if len(language) < 5:
             language = R.iso639_2_to_639_1(language)
 
-        logging.debug("No record found for chat {}, creating one with lang {}".format(update.effective_chat.id, language))
+        logging.debug(
+            "No record found for chat {}, creating one with lang {}".format(update.effective_chat.id, language))
         TBDB.create_default_chat_entry(update.effective_chat.id, language)
 
 
@@ -175,6 +175,16 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
     active_chats = TBDB.get_active_chats_num()
     await context.bot.send_message(
         chat_id=chat_id, text='Total users: {}\nActive users: {}'.format(tot_chats, active_chats), parse_mode='html',
+    )
+
+
+async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    num_audios = len(context.bot_data)
+    num_queues = context.bot_data.get('queue_len', 0)
+    await context.bot.send_message(
+        update.effective_chat.id, f"Number of audios being currently processed: {num_audios}\n"
+                                  f"Number of audios in queue: {num_queues}\n\n"
+                                  f"{list(context.bot_data.keys())}"
     )
 
 

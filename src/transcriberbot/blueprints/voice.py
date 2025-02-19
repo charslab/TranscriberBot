@@ -23,36 +23,33 @@ logger = logging.getLogger(__name__)
 
 # TODO: check if cpu usage is too high, if so, use ProcessPoolExecutor
 
+
 async def voice_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if TBDB.get_chat_voice_enabled(update.effective_chat.id) == 0:
         return
 
-    task = asyncio.create_task(process_media_voice(update, context, update.effective_message.voice, "voice"))
-    context.bot_data[update.effective_message.message_id] = task
+    await run_voice_task(update, context, update.effective_message.voice, "voice")
 
 
 async def audio_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if TBDB.get_chat_voice_enabled(update.effective_chat.id) == 0:
         return
 
-    task = asyncio.create_task(process_media_voice(update, context, update.effective_message.audio, "audio"))
-    context.bot_data[update.effective_message.message_id] = task
+    await run_voice_task(update, context, update.effective_message.audio, "audio")
 
 
 async def video_note_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if TBDB.get_chat_voice_enabled(update.effective_chat.id) == 0:
         return
 
-    task = asyncio.create_task(process_media_voice(update, context, update.effective_message.video_note, "video_note"))
-    context.bot_data[update.effective_message.message_id] = task
+    await run_voice_task(update, context, update.effective_message.video_note, "video_note")
 
 
 async def document_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if TBDB.get_chat_voice_enabled(update.effective_chat.id) == 0:
         return
 
-    task = asyncio.create_task(process_media_voice(update, context, update.effective_message.document, "document"))
-    context.bot_data[update.effective_message.message_id] = task
+    await run_voice_task(update, context, update.effective_message.document, "document")
 
 
 async def stop_task(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -61,8 +58,33 @@ async def stop_task(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if task is not None:
         task.cancel()
+        context.bot_data.pop(task_id)
     else:
         logging.warning("Task not found")
+
+
+async def wait_for_task_queue(context: ContextTypes.DEFAULT_TYPE):
+    # wait until there are less than N tasks in bot_data
+    context.bot_data['queue_len'] = context.bot_data.get('queue_len', 0) + 1
+
+    while len(context.bot_data) >= config.get_config_prop("app")["voice_max_threads"] + 1:
+        logging.debug("Waiting for tasks to finish")
+        await asyncio.sleep(1)
+
+    context.bot_data['queue_len'] -= 1
+    logging.debug("Task queue has available space")
+
+
+async def run_voice_task(update: Update, context: ContextTypes.DEFAULT_TYPE, media: [Voice | VideoNote | Document],
+                         name):
+    await wait_for_task_queue(context)
+
+    try:
+        task = asyncio.create_task(process_media_voice(update, context, media, name))
+        context.bot_data[update.effective_message.message_id] = task
+        await asyncio.gather(task)
+    finally:
+        context.bot_data.pop(update.effective_message.message_id)
 
 
 async def process_media_voice(update: Update, context: ContextTypes.DEFAULT_TYPE, media: [Voice | VideoNote | Document],
