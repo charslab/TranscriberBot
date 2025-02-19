@@ -35,7 +35,7 @@ def image_ocr_easyocr(path, lang):
 def image_ocr_tesserocr(path, lang):
     logger.info("opening %s", path)
 
-    with PyTessBaseAPI(path=config.get_config_prop("ocr")["tesseract_path"]) as api:
+    with PyTessBaseAPI(path=config.get_config_prop("app")["ocr"]["tesseract_path"]) as api:
         api.SetImageFile(path)
         text = api.GetUTF8Text().strip()
 
