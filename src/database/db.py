@@ -91,9 +91,13 @@ class TBDB():
 
     @staticmethod
     def get_chat_voice_enabled(chat_id):
-        with TBDB._get_db() as db:
-            c = db.execute("SELECT voice_enabled FROM chats WHERE chat_id='{0}'".format(chat_id))
-            return c.fetchone()[0]
+        try:
+            with TBDB._get_db() as db:
+                c = db.execute("SELECT voice_enabled FROM chats WHERE chat_id='{0}'".format(chat_id))
+                return c.fetchone()[0]
+        except TypeError as e:
+            logger.error("Error getting voice_enabled for chat %d: %s", chat_id, e)
+            raise e
 
     @staticmethod
     def set_chat_voice_enabled(chat_id, voice_enabled):
