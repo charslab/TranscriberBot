@@ -114,7 +114,7 @@ async def process_media_voice(update: Update, context: ContextTypes.DEFAULT_TYPE
     try:
         await transcribe_audio_file(update, context, file_path)
     except Exception:
-        logger.error("Exception handling %s from %d: %s", name, chat_id, traceback.format_exc())
+        logger.error("Exception handling %s from %d", name, chat_id, exc_info=True)
     finally:
         os.remove(file_path)
 

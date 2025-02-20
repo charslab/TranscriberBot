@@ -38,7 +38,7 @@ class Database():
             logger.error("exc_type: {}".format(exc_type))
             logger.error("exc_value: {}".format(exc_value))
             logger.error("exc_traceback: {}".format(exc_traceback))
-            logger.error(traceback.format_exc())
+            logger.error("Caught exception", exc_info=True)
 
         return True
 

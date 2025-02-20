@@ -214,8 +214,8 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await asyncio.sleep(0.1)
             except Exception as e:
                 logging.error(
-                    "Exception sending broadcast to %d: (%s) %s",
-                    chat['chat_id'], e, traceback.format_exc()
+                    "Exception sending broadcast to %d: (%s)",
+                    chat['chat_id'], e, exc_info=True
                 )
 
         await context.bot.send_message(

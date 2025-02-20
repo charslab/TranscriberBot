@@ -47,7 +47,7 @@ class WitTranscriber:
                 text = data["text"]
 
         except requests.exceptions.RequestException as e:
-            logger.error("Could not transcribe chunk: %s", traceback.format_exc())
+            logger.error("Could not transcribe chunk", exc_info=True)
 
         return text
 

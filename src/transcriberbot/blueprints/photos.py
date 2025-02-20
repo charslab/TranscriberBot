@@ -69,7 +69,7 @@ async def process_media_photo(update: Update, context: ContextTypes.DEFAULT_TYPE
         )
 
     except Exception as e:
-        logging.error("Exception handling photo from %d: %s", chat_id, traceback.format_exc())
+        logging.error("Exception handling photo from %d", chat_id, exc_info=True)
 
     finally:
         os.remove(file_path)
