@@ -18,6 +18,7 @@ import audiotools
 import config
 import resources as R
 from database import TBDB
+from transcriberbot.filters import is_premium_user
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +95,9 @@ async def run_voice_task(update: Update, context: ContextTypes.DEFAULT_TYPE, med
 
 async def process_media_voice(update: Update, context: ContextTypes.DEFAULT_TYPE, media: [Voice | VideoNote | Document],
                               name: str) -> None:
+    print("Update:", update)
+    print("Effective user:", update.effective_user)
+
     chat_id = update.effective_chat.id
     file_size = media.file_size
     max_size = config.get_config_prop("app").get("max_media_voice_file_size", 20 * 1024 * 1024)
@@ -119,6 +123,12 @@ async def process_media_voice(update: Update, context: ContextTypes.DEFAULT_TYPE
         os.remove(file_path)
 
 
+async def get_backend(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    backend = "wit"
+    if await is_premium_user(update, context):
+        backend = "whisper"
+    return backend
+
 async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TYPE, path: str):
     chat_id = update.effective_chat.id
     task_id = update.effective_message.message_id
@@ -136,8 +146,9 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
 
     logger.debug("Using key %s for lang %s", api_key, lang)
 
+    backend = await get_backend(update, context)
     message = await context.bot.send_message(
-        chat_id, R.get_string_resource("transcribing", lang), parse_mode="html",
+        chat_id, f"{R.get_string_resource('transcribing', lang)} ({backend})", parse_mode="html",
         reply_to_message_id=update.effective_message.message_id
     )
 

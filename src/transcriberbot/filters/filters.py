@@ -5,7 +5,7 @@ Date: 15/02/25
 import logging
 import asyncio
 
-from telegram.constants import ChatType
+from telegram.constants import ChatType, ChatMemberStatus
 from telegram.ext import ContextTypes
 from telegram.ext.filters import UpdateFilter
 from telegram import Update, ChatMember
@@ -84,6 +84,27 @@ async def chat_admin(update: Update, context: ContextTypes.DEFAULT_TYPE, callbac
 
     if is_admin:
         return await callback(update, context)
+
+
+async def is_premium_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print("is_premium_user: update.effective_user", update.effective_user)
+    user = (update.effective_user or update.channel_post.from_user)
+
+    # does not support anonymous channels
+    if user is None:
+        return False
+
+    user_id = user.id
+
+    premium_channel = await context.bot.get_chat(config.get_premium_chat_id())
+
+    try:
+        member = await premium_channel.get_member(user_id)
+        print("Member:", member)
+        return member.status in (ChatMemberStatus.MEMBER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER)
+    except Exception as e:
+        logging.error("User %d is not a premium user", user_id, exc_info=True)
+        return False
 
 
 class BotAdmin(UpdateFilter):

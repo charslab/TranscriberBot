@@ -72,3 +72,6 @@ def get_bot_admins():
 
 def get_premium_join_link():
     return get_config_prop("subscription")["premium_join_link"]
+
+def get_premium_chat_id():
+    return get_config_prop("subscription")["channel_id"]

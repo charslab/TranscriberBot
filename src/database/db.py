@@ -95,7 +95,7 @@ class TBDB():
             with TBDB._get_db() as db:
                 c = db.execute("SELECT voice_enabled FROM chats WHERE chat_id='{0}'".format(chat_id))
                 return c.fetchone()[0]
-        except TypeError as e:
+        except Exception as e:
             logger.error("Error getting voice_enabled for chat %d: %s", chat_id, e)
             raise e
 
