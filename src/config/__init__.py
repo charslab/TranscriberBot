@@ -68,3 +68,7 @@ def get_document_extensions():
 
 def get_bot_admins():
     return [int(id) for id in get_config_prop("telegram")["admins"]]
+
+
+def get_premium_join_link():
+    return get_config_prop("subscription")["premium_join_link"]

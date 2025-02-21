@@ -1,77 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources lang="default">
-<string name="language_set">Language set to {lang}</string>
-<string name="language_get">Current language: {lang}</string>
+    <string name="language_set">Language set to {lang}</string>
+    <string name="language_get">Current language: {lang}</string>
 
-<string name="message_welcome">
-This bot transcribes audio and pictures into text. Add it to a group or forward audio messages and pictures to it.
-{b}Note{/b}: Within groups, the bot will respond to commands by {b}non-anonymous admins only{/b}
+    <string name="message_welcome">
+        This bot transcribes audio and pictures into text. Add it to a group or forward audio messages and pictures to
+        it.
+        {b}Note{/b}: Within groups, the bot will respond to commands by {b}non-anonymous admins only{/b}
 
-Choose a language (for voice messages):
-{languages}
+        Choose a language (for voice messages):
+        {languages}
 
-/rate this bot or leave your feedback on {a href="https://telegram.me/storebot?start=transcriber_bot"}Store Bot{/a}
+        /rate this bot or leave your feedback on {a href="https://telegram.me/storebot?start=transcriber_bot"}Store
+        Bot{/a}
 
-If you have any trouble, or want to get in touch with the developers, contact @transcribersupport_bot
+        If you have any trouble, or want to get in touch with the developers, contact @transcribersupport_bot
 
-If you like this bot, you can /donate. This will help us maintain the service and keep on improving it. Thank you!
-</string>
+        If you like this bot, you can /donate. This will help us maintain the service and keep on improving it. Thank
+        you!
+    </string>
 
-<string name="message_rate">https://telegram.me/storebot?start=transcriber_bot</string>
-<string name="message_donate">
-You can make a donation for TranscriberBot on PayPal. This will really help us, thanks for your support!
-Money from donations will be used for paying the server and backend costs and let the devs make new features!
+    <string name="message_rate">https://telegram.me/storebot?start=transcriber_bot</string>
+    <string name="message_donate">
+        You can make a donation for TranscriberBot on PayPal. This will really help us, thanks for your support!
+        Money from donations will be used for paying the server and backend costs and let the devs make new features!
 
-<![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9H5XK6UDCAS86]]>
+        <![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9H5XK6UDCAS86]]>
 
-You can also donate with Bitcoin, Ethereum or Litecoin
+        You can also donate with Bitcoin, Ethereum or Litecoin
 
-BTC: {code}1DTrCfoNb9RLJnR5dfJvo9zwRjBZj8j1PY{/code}
+        BTC: {code}1DTrCfoNb9RLJnR5dfJvo9zwRjBZj8j1PY{/code}
 
-ETH: {code}0x0b784efc808527c75a8ef12a80622c41c28d45bd{/code}
+        ETH: {code}0x0b784efc808527c75a8ef12a80622c41c28d45bd{/code}
 
-LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
-</string>
+        LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
+    </string>
 
-<string name="message_private">Send a voice message or a picture with some text</string>
+    <string name="message_private">Send a voice message or a picture with some text</string>
 
-<string name="voice_enabled">Voice enabled</string>
-<string name="voice_disabled">Voice disabled</string>
-<string name="photos_enabled">Photos enabled</string>
-<string name="photos_disabled">Photos disabled</string>
-<string name="qr_enabled">QR enabled</string>
-<string name="qr_disabled">QR disabled</string>
+    <string name="voice_enabled">Voice enabled</string>
+    <string name="voice_disabled">Voice disabled</string>
+    <string name="photos_enabled">Photos enabled</string>
+    <string name="photos_disabled">Photos disabled</string>
+    <string name="qr_enabled">QR enabled</string>
+    <string name="qr_disabled">QR disabled</string>
 
-<string name="file_too_big">Sorry, file is too big! (limit: {0}MB)</string>
+    <string name="file_too_big">Sorry, file is too big! (limit: {0}MB)</string>
 
-<string name="transcribing">Transcribing...</string>
-<string name="audio_long">Audio is very long ({0}s), this will take some time</string>
-<string name="transcription_text">{b}Text:{/b}</string>
-<string name="transcription_continues">{b}[continues]:{/b}</string>
-<string name="transcription_failed">Could not transcribe audio</string>
-<string name="transcription_stopped">{b}[Stopped]{/b}</string>
+    <string name="transcribing">Transcribing...</string>
+    <string name="audio_long">Audio is very long ({0}s), this will take some time</string>
+    <string name="transcription_text">{b}Text:{/b}</string>
+    <string name="transcription_continues">{b}[continues]:{/b}</string>
+    <string name="transcription_failed">Could not transcribe audio</string>
+    <string name="transcription_stopped">{b}[Stopped]{/b}</string>
 
-<string name="photo_recognizing">Recognizing...</string>
-<string name="ocr_result">{b}Recognized Text:{/b}</string>
-<string name="photo_no_text">No text recognized</string>
-<string name="qr_result">{b}QR Code found:{/b}</string>
-<string name="qr_no_text">No QR code found</string>
+    <string name="photo_recognizing">Recognizing...</string>
+    <string name="ocr_result">{b}Recognized Text:{/b}</string>
+    <string name="photo_no_text">No text recognized</string>
+    <string name="qr_result">{b}QR Code found:{/b}</string>
+    <string name="qr_no_text">No QR code found</string>
 
-<string name="flood_warning">{b}WARNING:{/b} Flood detected. Stop spamming please</string>
+    <string name="flood_warning">{b}WARNING:{/b} Flood detected. Stop spamming please</string>
 
-<string name="translate_language_not_found">Unknown language: {language}</string>
-<string name="translate_language_missing">Please specify a language to translate to, e.g. "/translate english" </string>
-<string name="translate_reply_to_message">You must reply to a message in order to translate it</string>
+    <string name="translate_language_not_found">Unknown language: {language}</string>
+    <string name="translate_language_missing">Please specify a language to translate to, e.g. "/translate english"
+    </string>
+    <string name="translate_reply_to_message">You must reply to a message in order to translate it</string>
 
-<string name="privacy_policy">
-We do not store any personal data or media content (such as audio or pictures).
-The only user data we store is the telegram chat id along with the chosen settings.
-Voice/audio messages are sent to {a href="https://wit.ai/terms"}wit.ai{/a} for transcription, and are immediately deleted after the transcription is completed.
-Pictures are immediately deleted from our server after OCR or QR recognition is perfomed (offline).
-We do NOT store ANY message content (text, multimedia or anything else).
-</string>
+    <string name="privacy_policy">
+        We do not store any personal data or media content (such as audio or pictures).
+        The only user data we store is the telegram chat id along with the chosen settings.
+        Voice/audio messages are sent to {a href="https://wit.ai/terms"}wit.ai{/a} for transcription, and are
+        immediately deleted after the transcription is completed.
+        Pictures are immediately deleted from our server after OCR or QR recognition is perfomed (offline).
+        We do NOT store ANY message content (text, multimedia or anything else).
+    </string>
 
-<string name="unknown_api_key">{b}ERROR:{/b} Oops, no wit.ai API key could be found for the language {language}. :(</string>
+    <string name="unknown_api_key">{b}ERROR:{/b} Oops, no wit.ai API key could be found for the language {language}.
+        :(
+    </string>
 
+    <string name="premium_join_message">
+        To enable Transcriber Bot Premium, please join this channel: {invite_url}
+    </string>
 </resources>
