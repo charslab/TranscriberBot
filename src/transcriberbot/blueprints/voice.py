@@ -7,6 +7,7 @@ import logging
 import os
 import traceback
 import datetime
+import audioread
 from asyncio import CancelledError
 
 import telegram
@@ -123,10 +124,23 @@ async def process_media_voice(update: Update, context: ContextTypes.DEFAULT_TYPE
         os.remove(file_path)
 
 
-async def get_backend(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def get_duration(update: Update, path: str):
+    media = (update.effective_message.voice or update.effective_message.audio or
+             update.effective_message.video_note or update.effective_message.video)
+    if media is not None:
+        return media.duration
+
+    with audioread.audio_open(path) as f:
+        return f.duration
+
+
+async def get_backend(update: Update, context: ContextTypes.DEFAULT_TYPE, path):
     backend = "wit"
     if await is_premium_user(update, context):
-        backend = "whisper"
+        logging.info("User is premium")
+        duration = get_duration(update, path)
+        if duration <= config.get_config_prop("app")["whisper"]["max_duration"]:
+            backend = "whisper"
     return backend
 
 async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TYPE, path: str):
@@ -146,9 +160,9 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
 
     logger.debug("Using key %s for lang %s", api_key, lang)
 
-    backend = await get_backend(update, context)
+    backend = await get_backend(update, context, path)
     message = await context.bot.send_message(
-        chat_id, f"{R.get_string_resource('transcribing', lang)} ({backend})", parse_mode="html",
+        chat_id, f"{R.get_string_resource('transcribing', lang)} ({backend}, lang: {lang})", parse_mode="html",
         reply_to_message_id=update.effective_message.message_id
     )
 
@@ -162,7 +176,7 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
         text = R.get_string_resource("transcription_text", lang) + "\n"
 
     try:
-        async for idx, speech, n_chunks in audiotools.transcribe(path, api_key):
+        async for idx, speech, n_chunks in audiotools.transcribe(path, api_key, backend=backend):
             logging.debug(f"Transcription idx={idx} n_chunks={n_chunks}, text={speech}")
             suffix = f" <b>[{idx + 1}/{n_chunks}]</b>" if idx < n_chunks - 1 else ""
             reply_markup = keyboard if idx < n_chunks - 1 else None
