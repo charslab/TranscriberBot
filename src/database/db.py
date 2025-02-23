@@ -33,13 +33,6 @@ class Database():
     def __exit__(self, exc_type, exc_value, exc_traceback):
         logger.debug("__exit__")
         self.__close()
-
-        if exc_type:
-            logger.error("exc_type: {}".format(exc_type))
-            logger.error("exc_value: {}".format(exc_value))
-            logger.error("exc_traceback: {}".format(exc_traceback))
-            logger.error("Caught exception", exc_info=True)
-
         return True
 
     def execute(self, query, *args):
