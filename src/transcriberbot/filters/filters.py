@@ -87,7 +87,6 @@ async def chat_admin(update: Update, context: ContextTypes.DEFAULT_TYPE, callbac
 
 
 async def is_premium_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print("is_premium_user: update.effective_user", update.effective_user)
     user = (update.effective_user or update.channel_post.from_user)
 
     # does not support anonymous channels
@@ -100,10 +99,8 @@ async def is_premium_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         member = await premium_channel.get_member(user_id)
-        print("Member:", member)
         return member.status in (ChatMemberStatus.MEMBER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER)
     except Exception as e:
-        logging.error("User %d is not a premium user", user_id, exc_info=True)
         return False
 
 
