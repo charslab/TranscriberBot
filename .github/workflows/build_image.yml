@@ -1,11 +1,10 @@
-name: DockerBuildAndPush
+name: Build Image
 
 on:
   push:
     branches:
       - master
-      - developement
-      - ptb-async
+      - development
 
 env:
   IMAGE_NAME: transcriberbot
