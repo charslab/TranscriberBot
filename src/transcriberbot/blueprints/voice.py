@@ -143,7 +143,7 @@ async def get_backend(update: Update, context: ContextTypes.DEFAULT_TYPE, path):
             backend = "whisper"
     return backend
 
-async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TYPE, path: str):
+async def run_transcription(update: Update, context: ContextTypes.DEFAULT_TYPE, path: str, backend: str):
     chat_id = update.effective_chat.id
     task_id = update.effective_message.message_id
     lang = TBDB.get_chat_lang(chat_id)
@@ -160,7 +160,6 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
 
     logger.debug("Using key %s for lang %s", api_key, lang)
 
-    backend = await get_backend(update, context, path)
     message = await context.bot.send_message(
         chat_id, f"{R.get_string_resource('transcribing', lang)} ({backend}, lang: {lang})", parse_mode="html",
         reply_to_message_id=update.effective_message.message_id
@@ -197,43 +196,6 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
 
             text = f"{text} {speech}"
 
-            # retry_num = 0
-            # retry = True
-            # while retry:  # Retry loop
-            #     try:
-            #         if len(text + " " + speech) >= 4000:
-            #             text = R.get_string_resource("transcription_continues", lang) + "\n"
-            #             message = await context.bot.send_message(
-            #                 chat_id, f"{text} {speech} {suffix}",
-            #                 reply_to_message_id=message.message_id, parse_mode="html",
-            #                 reply_markup=keyboard
-            #             )
-            #         else:
-            #             message = await context.bot.edit_message_text(
-            #                 f"{text} {speech} {suffix}", chat_id=chat_id,
-            #                 message_id=message.message_id, parse_mode="html",
-            #                 reply_markup=keyboard
-            #             )
-            #
-            #         text += " " + speech
-            #         retry = False
-            #
-            #     except telegram.error.TimedOut as e:
-            #         print(e)
-            #         logger.error("Timeout error %s", traceback.format_exc())
-            #         retry_num += 1
-            #         if retry_num >= 3:
-            #             retry = False
-            #
-            #     except telegram.error.RetryAfter as r:
-            #         logger.warning("Retrying after %d", r.retry_after)
-            #         await asyncio.sleep(r.retry_after)
-            #
-            #     except telegram.error.TelegramError:
-            #         logger.error("Telegram error %s", traceback.format_exc())
-            #         retry = False
-
-
     except CancelledError:
         logging.debug("Task cancelled")
         await context.bot.edit_message_text(
@@ -251,3 +213,21 @@ async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TY
         )
 
         raise e
+
+async def transcribe_audio_file(update: Update, context: ContextTypes.DEFAULT_TYPE, path: str):
+    backend = await get_backend(update, context, path)
+
+    # try running transcription, if it fails with whisper, try wit
+    try:
+        await run_transcription(update, context, path, backend)
+    except Exception as e:
+        if backend == "whisper":
+            logger.error("Whisper transcription failed, falling back to wit", exc_info=True)
+            try:
+                await run_transcription(update, context, path, "wit")
+            except Exception as e2:
+                logger.error("Wit transcription also failed", exc_info=True)
+                raise e2
+        else:
+            raise e
+
