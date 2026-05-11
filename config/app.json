@@ -63,7 +63,8 @@
   },
 
   "whisper": {
-    "api_endpoint": "http://127.0.0.1:8000"
+    "api_endpoint": "http://127.0.0.1:8000",
+    "max_duration": 600
   },
 
   "logging": {
