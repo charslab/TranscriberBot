@@ -1,5 +1,6 @@
 # TranscriberBot-specific ignores
 media/
+.python-version
 
 # Generic data-related ignores
 *.csv

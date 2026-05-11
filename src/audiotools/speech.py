@@ -97,7 +97,15 @@ async def transcribe_wit(path, api_key):
 
 
 async def transcribe_whisper(path):
-    resp = requests.get(f"{config.get_config_prop('app')['whisper']['api_endpoint']}/transcribe?file_id={path}")
+    loop = asyncio.get_event_loop()
+    resp = await loop.run_in_executor(
+        None,
+        partial(requests.get,
+                url=f"{config.get_config_prop('app')['whisper']['api_endpoint']}/transcribe?file_id={path}")
+    )
+
+    if resp.status_code != 200:
+        raise ValueError(f"Error transcribing audio: {resp.text}")
 
     # split the response into chunks of 4000 characters
     chunks = textwrap.wrap(resp.text, 4000)
