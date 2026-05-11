@@ -6,6 +6,7 @@
 
 <string name="message_welcome">
 This bot transcribes audio and pictures into text. Add it to a group or forward audio messages and pictures to it.
+
 {b}Note{/b}: Within groups, the bot will respond to commands by {b}non-anonymous admins only{/b}
 
 Choose a language (for voice messages):
@@ -61,17 +62,26 @@ LTC: {code}LdsVPxqHR6PuKeMNvGYmMEkBRQ7M3AP3uY{/code}
 <string name="flood_warning">{b}WARNING:{/b} Flood detected. Stop spamming please</string>
 
 <string name="translate_language_not_found">Unknown language: {language}</string>
-<string name="translate_language_missing">Please specify a language to translate to, e.g. "/translate english" </string>
+<string name="translate_language_missing">Please specify a language to translate to, e.g. "/translate english"
+</string>
 <string name="translate_reply_to_message">You must reply to a message in order to translate it</string>
 
 <string name="privacy_policy">
 We do not store any personal data or media content (such as audio or pictures).
 The only user data we store is the telegram chat id along with the chosen settings.
-Voice/audio messages are sent to {a href="https://wit.ai/terms"}wit.ai{/a} for transcription, and are immediately deleted after the transcription is completed.
+Voice/audio messages are sent to {a href="https://wit.ai/terms"}wit.ai{/a} for transcription, and are
+immediately deleted after the transcription is completed.
 Pictures are immediately deleted from our server after OCR or QR recognition is perfomed (offline).
 We do NOT store ANY message content (text, multimedia or anything else).
 </string>
 
-<string name="unknown_api_key">{b}ERROR:{/b} Oops, no wit.ai API key could be found for the language {language}. :(</string>
+<string name="unknown_api_key">{b}ERROR:{/b} Oops, no wit.ai API key could be found for the language {language}.
+:(
+</string>
 
+<string name="premium_join_message">
+To enable Transcriber Bot Premium, please join this channel: {invite_url}
+</string>
+<string name="current_plan_free">{b}Current plan:{/b} Free</string>
+<string name="current_plan_premium">{b}Current plan:{/b} Premium</string>
 </resources>

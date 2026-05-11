@@ -1,6 +1,6 @@
 #!/bin/sh
 
-docker pull ghcr.io/charslab/transcriberbot:ptb-async
+docker pull ghcr.io/charslab/transcriberbot:development
 docker run \
    -e LC_ALL=C \
    -d --restart unless-stopped \
@@ -12,4 +12,4 @@ docker run \
    --cpus=4.0 \
    --memory=3000m \
    -u "$(id -u):1337" \
-   ghcr.io/charslab/transcriberbot:ptb-async
+   ghcr.io/charslab/transcriberbot:development

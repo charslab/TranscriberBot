@@ -33,13 +33,6 @@ class Database():
     def __exit__(self, exc_type, exc_value, exc_traceback):
         logger.debug("__exit__")
         self.__close()
-
-        if exc_type:
-            logger.error("exc_type: {}".format(exc_type))
-            logger.error("exc_value: {}".format(exc_value))
-            logger.error("exc_traceback: {}".format(exc_traceback))
-            logger.error("Caught exception", exc_info=True)
-
         return True
 
     def execute(self, query, *args):
@@ -95,7 +88,7 @@ class TBDB():
             with TBDB._get_db() as db:
                 c = db.execute("SELECT voice_enabled FROM chats WHERE chat_id='{0}'".format(chat_id))
                 return c.fetchone()[0]
-        except TypeError as e:
+        except Exception as e:
             logger.error("Error getting voice_enabled for chat %d: %s", chat_id, e)
             raise e
 

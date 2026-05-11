@@ -2,23 +2,24 @@
 Author: Carlo Alberto Barbano <carlo.alberto.barbano@outlook.com>
 Date: 15/02/25
 """
+import logging
+from functools import partial
+
 from telegram import Update
+from telegram.ext import MessageHandler, ApplicationBuilder, CommandHandler, CallbackQueryHandler, \
+    ChatMemberHandler
+from telegram.ext.filters import VOICE, VIDEO_NOTE, AUDIO, PHOTO
 
 import config
-import logging
-
-from telegram.ext import MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes, CallbackQueryHandler, \
-    ChatMemberHandler
-from functools import partial
-from transcriberbot.blueprints import commands, messages, voice, photos, chat_handlers
+from transcriberbot.blueprints import commands, messages, voice, photos, chat_handlers, payments
 from transcriberbot.blueprints.commands import set_language
-
-from telegram.ext.filters import VOICE, VIDEO_NOTE, AUDIO, PHOTO
 from transcriberbot.filters import chat_admin, FromPrivate, AllowedDocument, BotAdmin
 
 
 def run(bot_token: str):
     application = (ApplicationBuilder()
+                   # .base_url("https://api.telegram.org/bot{token}/test")
+                   # .base_file_url("https://api.telegram.org/file/bot{token}/test")
                    .token(bot_token)
                    .concurrent_updates(True)
                    .build())
@@ -44,7 +45,8 @@ def run(bot_token: str):
         'enable_qr': commands.enable_qr,
         'translate': commands.translate,
         'donate': commands.donate,
-        'privacy': commands.privacy
+        'privacy': commands.privacy,
+        'premium': payments.premium
     }
 
     for command, callback in chat_admin_handlers.items():
