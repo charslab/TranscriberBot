@@ -61,12 +61,11 @@ async def process_media_photo(update: Update, context: ContextTypes.DEFAULT_TYPE
                 )
                 return
 
-
-        await context.bot.send_message(
-            text=R.get_string_resource("photo_no_text", lang),
-            chat_id=chat_id, reply_to_message_id=message_id,
-            parse_mode="html",
-        )
+            await context.bot.send_message(
+                text=R.get_string_resource("photo_no_text", lang),
+                chat_id=chat_id, reply_to_message_id=message_id,
+                parse_mode="html",
+            )
 
     except Exception as e:
         logging.error("Exception handling photo from %d", chat_id, exc_info=True)
